@@ -214,18 +214,12 @@
             <version>${appengine.target.version}</version>
             <scope>test</scope>
         </dependency>
+        
         <dependency>
             <groupId>com.google.appengine</groupId>
             <artifactId>appengine-tools-sdk</artifactId>
             <!--            <version>1.6.1.1</version>-->
             <version>${appengine.target.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.appengine</groupId>
-            <artifactId>appengine-local-runtime</artifactId>
-            <version>1.9.2</version>
             <scope>test</scope>
         </dependency>
         

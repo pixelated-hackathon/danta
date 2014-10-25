@@ -90,7 +90,7 @@ public class Datastore implements EntityDao {
 
     protected <T extends DaoEntity> Map<String, Field> getEntityFields(Class<T> entity) {
         Map<String, Field> returnFields = new HashMap<String, Field>();
-        Field[] fields = entity.getClass().getDeclaredFields();
+        Field[] fields = entity.getDeclaredFields();
         for (Field field : fields) {
             field.setAccessible(true);
             returnFields.put(field.getName(), field);
@@ -133,7 +133,7 @@ public class Datastore implements EntityDao {
                 if (entityFields.containsKey(field)) {
                     Field entityField = entityFields.get(field);
                     entityField.setAccessible(true);
-                    entityField.set(this, values);
+                    entityField.set(newEntity, entityField.get(this));
                 }
             }
             if (newEntity.getId() == null && entity.getKey() != null) {
