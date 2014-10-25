@@ -12,9 +12,8 @@ import java.util.Date;
  *
  * @author Juan Carlos Rojas
  */
-public class TestValue {
+public class TestValue extends DaoEntity {
   
-    private String id;
     private String value;
     private Date date;
     public TestValue() {}
@@ -28,20 +27,6 @@ public class TestValue {
     public String toString() {
         return String.format(
                 "TestValue[id=%s, firstName='%d']", getValue(), getDate());
-    }
-
-    /**
-     * @return the id
-     */
-    public String getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(String id) {
-        this.id = id;
     }
 
     /**
