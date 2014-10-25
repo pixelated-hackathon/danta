@@ -133,7 +133,7 @@ public class Datastore implements EntityDao {
                 if (entityFields.containsKey(field)) {
                     Field entityField = entityFields.get(field);
                     entityField.setAccessible(true);
-                    entityField.set(newEntity, entityField.get(this));
+                    entityField.set(newEntity, values.get(field));
                 }
             }
             if (newEntity.getId() == null && entity.getKey() != null) {
