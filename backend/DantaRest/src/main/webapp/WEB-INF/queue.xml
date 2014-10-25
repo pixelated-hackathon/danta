@@ -1,0 +1,10 @@
+<queue-entries>
+<!--<queue>
+    <name>installation-queue</name>
+    <max-concurrent-requests>1</max-concurrent-requests>
+    <rate>5/s</rate>
+    <retry-parameters>
+        <task-retry-limit>0</task-retry-limit>
+    </retry-parameters>
+</queue>-->
+</queue-entries>
