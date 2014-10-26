@@ -5,12 +5,14 @@
  */
 package pixelated.danta.service;
 
-import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pixelated.dantagae.bo.TestValue;
-import pixelated.danta.dao.TestDao;
-import pixelated.danta.dao.exception.DaoException;
+import pixelated.danta.dao.Datasource;
+import pixelated.dantagae.bo.commerce.BoCommerce;
+import pixelated.dantagae.bo.family.BoFamily;
+import pixelated.dantagae.bo.family.BoFamilyMember;
 
 /**
  *
@@ -20,33 +22,53 @@ import pixelated.danta.dao.exception.DaoException;
 public class TestService {
 
     @Autowired
-    TestDao testDao;
+    Datasource datasource;
+    
+    public TestService() {
+    }
 
-    public boolean storeValue(String value) {
-
+    public boolean install(){
         try {
-            TestValue newTestValue = new TestValue(value);
-            testDao.save(newTestValue);
+            
+           
+            datasource.drop(BoFamily.class);
+            datasource.drop(BoFamilyMember.class);
+            datasource.drop(BoCommerce.class);
+            
+            BoFamily testFamily = new BoFamily();
+            testFamily.setFamilyLastName("Rojas");
+            testFamily.setFunds(60000d);
+            datasource.saveEntity(testFamily);
+                    
+            BoFamilyMember newMember = new BoFamilyMember();
+            newMember.setFirstName("Mario");
+            newMember.setLastName("Rodriguez");
+            newMember.setHousehold(true);
+            newMember.setFamilyId( testFamily.getId() );
+            datasource.saveEntity(newMember );
+            newMember = new BoFamilyMember();
+            newMember.setFirstName("Kevin");
+            newMember.setLastName("Rodriguez");
+            newMember.setHousehold(false);
+            newMember.setFamilyId( testFamily.getId() );
+            datasource.saveEntity(newMember );
+            
+            BoCommerce commerce = new BoCommerce();
+            commerce.setName("Abastecedor Don Carlos");
+            commerce.setOwnerFirstName("Carlos");
+            commerce.setOwnerLastName("Rojas");
+            commerce.setPhone("87040233");
+            datasource.saveEntity(commerce);
+            
             return true;
         } catch (Exception ex) {
+            Logger.getLogger(this.getClass().toString()).log(Level.SEVERE, null, ex);
             return false;
         }
-
+        
+        
+        
     }
 
-    public List<TestValue> getAllValues() throws DaoException {
-        return testDao.getAll();
-    }
-
-    public boolean updateValue(String id, String value) {
-
-        try {
-            TestValue newTestValue = new TestValue(value);
-            testDao.save(newTestValue);
-            return true;
-        } catch (Exception ex) {
-            return false;
-        }
-    }
 
 }

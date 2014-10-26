@@ -12,13 +12,16 @@ import com.google.appengine.api.datastore.EntityNotFoundException;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.KeyFactory;
 import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Repository;
-import pixelated.danta.dao.EntityDao;
+import pixelated.danta.dao.Datasource;
+import pixelated.danta.dao.ParamBuilder;
+import pixelated.danta.dao.exception.DaoException;
 import pixelated.danta.dao.exception.DaoNotFoundException;
 import pixelated.danta.dao.exception.DaoRequiredFieldException;
 import pixelated.danta.dao.exception.DaoUnexpectedException;
@@ -29,7 +32,7 @@ import pixelated.dantagae.bo.DaoEntity;
  * @author Juan Carlos Rojas
  */
 @Repository
-public class Datastore implements EntityDao {
+public class Datastore implements Datasource {
 
     private final String ID_FIELD = "Id";
     private final DatastoreService datastore;
@@ -145,4 +148,67 @@ public class Datastore implements EntityDao {
             throw new DaoUnexpectedException(ex);
         }
     }
+
+    @Override
+    public <T extends DaoEntity> long drop(Class<T> entityClass) {
+      
+        com.google.appengine.api.datastore.Query q = new com.google.appengine.api.datastore.Query(entityClass.getSimpleName()).setKeysOnly();
+
+        // Use PreparedQuery interface to retrieve results
+        PreparedQuery pq = datastore.prepare(q);
+        List<Key> keys = new ArrayList<Key>();
+        for (Entity entity : pq.asIterable()) {
+            keys.add(entity.getKey());
+        }
+        if (keys.size() > 0) {
+            datastore.delete(keys.toArray(new Key[keys.size()]));
+        }
+        return keys.size();
+    }
+
+    
+    @Override
+    public <T extends DaoEntity> List<T> findByFields(Class<T> entityClass, ParamBuilder values, boolean validate) throws DaoUnexpectedException, DaoNotFoundException {
+           List<T> results = new ArrayList<>();
+        com.google.appengine.api.datastore.Query q = new com.google.appengine.api.datastore.Query( entityClass.getSimpleName() );
+        if (values.size() > 0) {
+            q.setFilter( this.toDatastoreFilter(values) );
+        }
+        PreparedQuery pq = datastore.prepare(q);
+        for (Entity entity : pq.asIterable()) {
+            results.add( this.getDaoEntity(entityClass, entity));
+        }
+        return results;
+    }
+
+    @Override
+    public <T extends DaoEntity> T findByField(Class<T> entityClass, String field, Object value, boolean validate) throws DaoUnexpectedException, DaoNotFoundException {
+       List<T> results = this.findByFields(entityClass, ParamBuilder.param(field, value),validate);
+       if (results.isEmpty()) {
+           return null;
+       } else{
+           return results.get(0);
+       }
+    }
+    
+    
+    protected Query.Filter toDatastoreFilter(ParamBuilder fields) {
+        Query.Filter rootFilter;
+        if (fields.size() == 1) {
+            String fieldName = fields.getParams().keySet().toArray()[0].toString();
+            Object value = fields.getParams().get(fieldName);
+            rootFilter = new Query.FilterPredicate(fieldName, com.google.appengine.api.datastore.Query.FilterOperator.EQUAL, value);
+        } else {
+            List<Query.Filter> filters = new ArrayList<>();
+            for (String fieldName : fields.getParams().keySet()) {
+                Object value = fields.getParams().get(fieldName);
+                filters.add(new Query.FilterPredicate(fieldName, com.google.appengine.api.datastore.Query.FilterOperator.EQUAL, value));
+            }
+            rootFilter = Query.CompositeFilterOperator.and(filters);
+        }
+        return rootFilter;
+    }
+    
 }
+
+

@@ -7,6 +7,8 @@
 package pixelated.danta.dao;
 
 import java.util.List;
+import java.util.Map;
+import pixelated.danta.dao.exception.DaoException;
 import pixelated.danta.dao.exception.DaoNotFoundException;
 import pixelated.danta.dao.exception.DaoRequiredFieldException;
 import pixelated.danta.dao.exception.DaoUnexpectedException;
@@ -16,7 +18,7 @@ import pixelated.dantagae.bo.DaoEntity;
  *
  * @author Juan Carlos Rojas
  */
-public interface EntityDao {
+public interface Datasource {
 
     <T extends DaoEntity> T findById(Class<T> entityClass, String id) throws DaoUnexpectedException, DaoNotFoundException;
 
@@ -25,5 +27,11 @@ public interface EntityDao {
     void updateEntity(DaoEntity entity) throws DaoUnexpectedException, DaoRequiredFieldException, DaoNotFoundException;
 
      <T extends DaoEntity> List<T> getAll(Class<T> entityClass) throws DaoUnexpectedException;
+    
+     <T extends DaoEntity> long drop(Class<T> entityClass);
+     
+    <T extends DaoEntity> List<T> findByFields(Class<T> entityClass, ParamBuilder values, boolean validate) throws DaoUnexpectedException,DaoNotFoundException;
+     
+    <T extends DaoEntity> T findByField(Class<T> entityClass,String field, Object value, boolean validate) throws DaoUnexpectedException,DaoNotFoundException;
     
 }
