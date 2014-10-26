@@ -17,9 +17,9 @@
         <div style="width: 700px;z-index: -1;position: absolute;left: 387px;top: 7PX;color: white;font-size: 20px;letter-spacing: 1px;">PRINCIPAL | CONSULTA </div>
         <div class="rightpane">  
             <div style="margin-top: 125px;margin-left: 5px;">VER EN EXPEDIENTE</div>
-            <div style="margin-top: 50px;margin-left: 5px;">HISTORIAL TRANSACCIONAL</div>
+            <div style="margin-top: 50px;margin-left: 5px;"><a href="http://localhost:8080/web/ExpedienteDigital/HistorialTransacciones?phone=87040233">HISTORIAL TRANSACCIONAL</a></div>
             <div style="margin-top: 50px;margin-left: 5px;">ESTADO ACTUAL</div>
-            <div style="margin-top: 50px;margin-left: 5px;">REALIZAR PAGO</div>
+            <div style="margin-top: 50px;margin-left: 5px;"><a href="http://localhost:8080/web/ExpedienteDigital/Desembolso?phone=87040233">REALIZAR PAGO</a></div>
             <div style="margin-left: 15px;margin-top: 100px;">
                 <img style="width: 100px;" src="<c:url value="/resources/main/source/logo.png" />"/>
             </div>
