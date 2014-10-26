@@ -65,10 +65,5 @@ public class TestService {
             Logger.getLogger(this.getClass().toString()).log(Level.SEVERE, null, ex);
             return false;
         }
-        
-        
-        
     }
-
-
 }

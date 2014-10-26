@@ -30,7 +30,6 @@ public class FamilyPaymentLogicController {
     
     public boolean doPayment(String familyId, String commerceId, Long amount) {
         try {
-            
             return true;
         } catch (Exception ex) {
             ErrorHandler.handleError(this.getClass(), ex);
