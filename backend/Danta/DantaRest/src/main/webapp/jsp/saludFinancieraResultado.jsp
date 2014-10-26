@@ -34,7 +34,7 @@
         </div>  
         
         <div class="content">
-            <div style="width: 250px;z-index: -1;position: absolute;left: 370px;top: 56px;color: white;font-size: 35px;font-family: Roboto; font-weight: bold">Familia ${family.familyLastName}</div>
+            <div style="width: 300px;z-index: -1;position: absolute;left: 370px;top: 56px;color: white;font-size: 35px;font-family: Roboto; font-weight: bold">Familia ${family.familyLastName}</div>
             <div style="width: 450px;z-index: -1;position: absolute;left: 370px;top: 150px;color: white;font-size: 20px; font-family: sans-serif;">Resultado de comparación de ingresos y egresos</div>
             <div style="width: 200px;z-index: 1;position: absolute;left: 320px;top: 200px;color: white;font-size: 20px; font-family: sans-serif;"><img style="width: 570px;" src="<c:url value="/resources/main/source/GRAFICO.png" />"/></div>
             

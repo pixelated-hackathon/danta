@@ -33,7 +33,7 @@
         </div>  
         
         <div class="content">
-            <div style="width: 250px;z-index: -1;position: absolute;left: 370px;top: 56px;color: white;font-size: 35px;font-family: Roboto">Familia ${family.familyLastName}</div>
+            <div style="width: 300px;z-index: -1;position: absolute;left: 370px;top: 56px;color: white;font-size: 35px;font-family: Roboto">Familia ${family.familyLastName}</div>
             <div class="jefeback">
                 <img class="jefebackimg" src="<c:url value="/resources/main/source/jefeback.png" />"/>
                 <img style="width: 150px;z-index: -1;position: absolute;left: 356px;top: 92px;" src="<c:url value="/resources/main/source/familia.png" />"/>
