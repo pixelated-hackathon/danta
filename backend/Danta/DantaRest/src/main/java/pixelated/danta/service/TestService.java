@@ -38,6 +38,7 @@ public class TestService {
             BoFamily testFamily = new BoFamily();
             testFamily.setFamilyLastName("Rojas");
             testFamily.setFunds(60000d);
+            testFamily.setPhone("87040233");
             datasource.saveEntity(testFamily);
                     
             BoFamilyMember newMember = new BoFamilyMember();
@@ -57,7 +58,7 @@ public class TestService {
             commerce.setName("Abastecedor Don Carlos");
             commerce.setOwnerFirstName("Carlos");
             commerce.setOwnerLastName("Rojas");
-            commerce.setPhone("87040233");
+            commerce.setPhone("70509709");
             datasource.saveEntity(commerce);
             
             return true;

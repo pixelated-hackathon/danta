@@ -10,8 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import pixelated.danta.dao.exception.DaoMessageException;
 import pixelated.danta.dao.exception.DaoNotFoundException;
+import pixelated.danta.dao.exception.DaoRequiredFieldException;
 import pixelated.danta.dao.exception.DaoUnexpectedException;
 import pixelated.dantagae.bo.family.BoFamily;
+import pixelated.dantagae.bo.family.BoFamilyTransaction;
 
 /**
  *
@@ -29,6 +31,14 @@ public class FamilyDao {
         } catch (DaoNotFoundException ex) {
             throw new DaoMessageException("El número de teléfono no corresponde a ninguna familia registrada",ex);
         }
+    }
+
+    public BoFamilyTransaction saveTransaction(BoFamilyTransaction newFamilyTransaction) throws DaoUnexpectedException{
+        return datasource.saveEntity(newFamilyTransaction);
+    }
+
+    public void update(BoFamily family) throws DaoUnexpectedException, DaoRequiredFieldException,DaoNotFoundException {
+        datasource.updateEntity(family);
     }
     
     
