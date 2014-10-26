@@ -6,12 +6,13 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Expediente Digital - Desembolso</title>
-        <link href="<c:url value="/resources/main/css/expedienteDigitalDesembolso.css" />" rel="stylesheet">
+        <title>Expediente Digital - Consulta</title>
+        <link href="<c:url value="/resources/main/css/expedienteDigitalSaludFinanciero.css" />" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href='http://fonts.googleapis.com/css?family=Roboto'>
         <link rel="stylesheet" type="text/css" href='http://fonts.googleapis.com/css?family=Droid+Sans'>
     </head>
@@ -30,29 +31,18 @@
             </div>
             <div style="width: 10px;z-index: 1;position: absolute;left: 976px;top: 616px;"><a href="http://localhost:8080/web/ExpedienteDigital/Consulta?phone=87040233">VOLVER</a></div>
         </div>  
-
+        
         <div class="content">
-            <div style="width: 250px;z-index: -1;position: absolute;left: 370px;top: 56px;color: white;font-size: 35px;font-family: Roboto">Familia ${family.familyLastName}</div>
-            <div class="jefeback">
+            <div style="width: 250px;z-index: -1;position: absolute;left: 370px;top: 56px;color: white;font-size: 35px;font-family: Roboto; font-weight: bold">Familia ${family.familyLastName}</div>
+            <div style="width: 400px;z-index: -1;position: absolute;left: 370px;top: 150px;color: white;font-size: 20px; font-family: sans-serif;">CONSULTAR SALUD FINANCIERA</div>
 
-                <div style="width: 500px;z-index: -1;position: absolute;left: 370px;top: 100px;color: white;font-size: 20px;font-family: sans-serif;">
-                    
-                    
-                    <c:if test="${amount == null}">
-                        <p>Para realizar un desembolso , digite el monto del desembolso a continuación y seguido presione el botón aceptar</p>
-                        <form method="GET" >
-                            <input id="amount" name="amount" type="text" style="width: 250px;height: 25px;font-size: 15px;" />  
-                            <input id="phone"  name="phone" type="hidden" value="${phone}"/>
-                            <input id="btnAccept" style="width: 70px;font-size: 100px;" type="submit" value="Aceptar">
-                        </form>
-                    </c:if>
-                    <c:if test="${amount != null}">
-                        <p>El pago al beneficiario se realizó con éxito</p>
-                    </c:if>
+            <input type='date' style="width: 200px;z-index: 1;position: absolute;left: 370px;top: 200px;font-size: 20px"/>
+            <input type='date' style="width: 200px;z-index: 1;position: absolute;left: 635px;top: 200px;font-size: 20px"/>
+            
+            <div style="width: 250px;z-index: -1;position: absolute;left: 590px;top: 175px;color: white;font-size: 25px;font-family: Roboto; font-weight: bold"><p>AL</p></div>
+            <div ><input type="button" value="CONSULTAR" style="width: 100px; height: 100px;     z-index: -1;position: absolute;left: 560px;top: 255px;font-size: 50px;font-family: Roboto; font-weight: bold" onclick="window.location='/web/ExpedienteDigital/SaludFinancieraResultado?phone=87040233'"/></div>
 
-                </div>   
-            </div>
         </div>
-
+        
     </body>
 </html>

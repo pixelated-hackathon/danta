@@ -7,6 +7,7 @@
 package pixelated.dantagae.bo.family;
 
 import java.util.Date;
+import java.util.List;
 import pixelated.dantagae.bo.DaoEntity;
 
 /**
@@ -150,8 +151,5 @@ public class BoFamilyTransaction extends DaoEntity {
     public void setDescription(String Description) {
         this.Description = Description;
     }
-	
-
-    
     
 }

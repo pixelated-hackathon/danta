@@ -7,8 +7,18 @@ and open the template in the editor.
     Created on : Oct 25, 2014, 9:37:48 PM
     Author     : william
 */
+
+a:link {
+    color: white;
+}
+
+/* visited link */
+a:visited {
+    color: white;
+}
+
 body{
-    background-image: url(../source/background2.png);  
+    background-image: url(../source/background4.png);  
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
@@ -17,13 +27,12 @@ body{
 }
 
 .rightpane{
-    background-image: url(../source/rightpane.png);
-    float: right;
+    background-image: url(../source/rightpane3.png);
     width: 200px;
-    margin-top: 0px;
-    height: 700px;
-    margin-right: 25%;
-    text-align: center;
+    z-index: -1;
+    position: absolute;
+    left: 881px;
+    top: -1px;
     color: white;
 }
 
