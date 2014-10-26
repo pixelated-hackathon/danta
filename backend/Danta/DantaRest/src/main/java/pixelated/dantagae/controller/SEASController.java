@@ -28,7 +28,7 @@ public class SEASController {
     public ModelAndView Consulta(@RequestParam("phone") String phone) {
        ModelAndView model = new ModelAndView("expedienteDigitalConsulta");
        
-        BoFamily family = familyService.findByPhone(phone);
+       BoFamily family = familyService.findByPhone(phone);
        
        model.addObject("family", family);
        model.addObject("hold",getFamilyService().getHold(family.getId()));
@@ -38,21 +38,25 @@ public class SEASController {
     }
     
     @ResponseBody
-    @RequestMapping(value = "/ExpedienteDigital/AgregarExpediente", method = RequestMethod.GET)
-    public ModelAndView AgregarExpediente() {
+    @RequestMapping(value = "/ExpedienteDigital/AgregarExpediente", method = RequestMethod.GET, params = {"phone"})
+    public ModelAndView AgregarExpediente(@RequestParam("phone") String phone) {
        ModelAndView model = new ModelAndView("redirect:/web/ExpedienteDigital/Consulta");
        
-       //testService.install();
+       BoFamily family = familyService.findByPhone(phone);
+       
+       model.addObject("family", family);
        
        return model;
     }
     
     @ResponseBody
-    @RequestMapping(value = "/ExpedienteDigital/HistorialTransacciones", method = RequestMethod.GET)
-    public ModelAndView HistorialTransacciones() {
+    @RequestMapping(value = "/ExpedienteDigital/HistorialTransacciones", method = RequestMethod.GET, params = {"phone"})
+    public ModelAndView HistorialTransacciones(@RequestParam("phone") String phone) {
        ModelAndView model = new ModelAndView("historialTransacciones");
        
-       //testService.install();
+       BoFamily family = familyService.findByPhone(phone);
+       
+       model.addObject("family", family);
        
        return model;
     }
