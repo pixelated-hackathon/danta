@@ -6,6 +6,7 @@
 
 package pixelated.danta.dao;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import pixelated.danta.dao.exception.DaoMessageException;
@@ -39,6 +40,15 @@ public class FamilyDao {
 
     public void update(BoFamily family) throws DaoUnexpectedException, DaoRequiredFieldException,DaoNotFoundException {
         datasource.updateEntity(family);
+    }
+
+    public BoFamily getById( String id) throws DaoUnexpectedException, DaoNotFoundException {
+       return datasource.findById(BoFamily.class ,id);
+    }
+
+    public List<BoFamily> getAll() throws DaoUnexpectedException {
+       return datasource.getAll(BoFamily.class);
+        
     }
     
     
