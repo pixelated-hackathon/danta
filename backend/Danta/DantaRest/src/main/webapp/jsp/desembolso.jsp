@@ -28,10 +28,31 @@
             </div>
             <div style="width: 10px;z-index: -1;position: absolute;left: 976px;top: 616px;">Atrás</div>
         </div>  
-        
+
         <div class="content">
             <div style="width: 200px;z-index: -1;position: absolute;left: 370px;top: 56px;color: white;font-size: 35px;">Familia ${family.familyLastName}</div>
+            <div class="jefeback">
+
+                <div style="width: 600px;z-index: -1;position: absolute;left: 370px;top: 360px;color: white;font-size: 20px;">
+                    
+                    
+                    <c:if test="${amount == null}">
+                        <p>Para realizar un desembolso , digite el monto del desembolso a continuación y seguido presione el botón aceptar</p>
+                        <form method="GET" >
+                            <input id="amount" name="amount" type="text" />  
+                            <input id="phone"  name="phone" type="hidden" value="${phone}"/>
+                            <input id="btnAccept" type="submit" value="Aceptar">
+                        </form>
+                    </c:if>
+                    <c:if test="${amount != null}">
+                        <p>El pago al beneficiario se realizó con éxito</p>
+                    </c:if>
+
+                    <a href="<c:url value="/web/ExpedienteDigital/Consulta?phone=${phone}"/>">REGRESAR</a>
+
+                </div>   
+            </div>
         </div>
-        
+
     </body>
 </html>
