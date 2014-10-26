@@ -138,7 +138,7 @@ public class TestService {
             commerce.setName("Abastecedor Don Carlos");
             commerce.setOwnerFirstName("Carlos");
             commerce.setOwnerLastName("Rojas");
-            commerce.setPhone("70509709");
+            commerce.setPhone("87040233");
             datasource.saveEntity(commerce);
 
             return true;
