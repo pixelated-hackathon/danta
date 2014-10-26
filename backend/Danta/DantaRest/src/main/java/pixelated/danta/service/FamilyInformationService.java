@@ -18,6 +18,7 @@ import pixelated.danta.entities.FamilyMember;
 import pixelated.danta.service.logic.ErrorHandler;
 import pixelated.dantagae.bo.family.BoFamily;
 import pixelated.dantagae.bo.family.BoFamilyMember;
+import pixelated.dantagae.bo.family.BoFamilyTransaction;
 import pixelated.dantagae.sms.BoPendingSMS;
 
 /**
@@ -121,6 +122,15 @@ public class FamilyInformationService {
         }catch (Exception ex) {
             ErrorHandler.handleError(this.getClass(), ex);
 
+            return null;
+        }
+    }
+    
+    public List<BoFamilyTransaction> getTransactions(String id){
+        try{
+            return familyDao.getTransactionsByFamilyId(id);
+        }catch (Exception ex) {
+            ErrorHandler.handleError(this.getClass(), ex);
             return null;
         }
     }

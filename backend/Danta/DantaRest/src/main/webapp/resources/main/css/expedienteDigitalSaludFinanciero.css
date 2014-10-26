@@ -7,17 +7,27 @@ and open the template in the editor.
     Created on : Oct 25, 2014, 9:37:48 PM
     Author     : william
 */
+
+a:link {
+    color: white;
+}
+
+/* visited link */
+a:visited {
+    color: white;
+}
+
 body{
-    background-image: url(../source/background2.png);  
+    background-image: url(../source/background5.png);  
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-position: center;
-    background-size: 50% 100%;
+    background-size: 55% 100%;
     background-color: black;
 }
 
 .rightpane{
-    background-image: url(../source/rightpane.png);
+    background-image: url(../source/rightpane3.png);
     float: right;
     width: 200px;
     margin-top: 0px;

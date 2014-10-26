@@ -44,6 +44,30 @@ public class SEASController {
        
        return model;
     }
+    
+    @ResponseBody
+    @RequestMapping(value = "/ExpedienteDigital/SaludFinanciera", method = RequestMethod.GET, params = {"phone"})
+    public ModelAndView SaludFinanciera(@RequestParam("phone") String phone) {
+       ModelAndView model = new ModelAndView("saludFinanciera");
+       
+       BoFamily family = familyService.findByPhone(phone);
+       
+       model.addObject("family", family);
+       
+       return model;
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "/ExpedienteDigital/SaludFinancieraResultado", method = RequestMethod.GET, params = {"phone"})
+    public ModelAndView SaludFinancieraResultado(@RequestParam("phone") String phone) {
+       ModelAndView model = new ModelAndView("saludFinancieraResultado");
+       
+       BoFamily family = familyService.findByPhone(phone);
+       
+       model.addObject("family", family);
+       
+       return model;
+    }
 
     @ResponseBody
     @RequestMapping(value = "/ExpedienteDigital/AgregarExpediente", method = RequestMethod.GET, params = {"phone"})
@@ -75,12 +99,14 @@ public class SEASController {
     public ModelAndView Desembolso(@RequestParam("phone") String phone, @RequestParam(value = "amount", required = false) Double amount) {
         ModelAndView model = new ModelAndView("desembolso");
         model.addObject("phone", phone);
+        BoFamily family = familyService.findByPhone(phone);
         if (amount != null) {
-            BoFamily family = familyService.findByPhone(phone);
-            familyPaymentService.addFunds(family.getId(), amount);
+            
+            payment.addFunds(family.getId(), amount);
+            
             model.addObject("amount", amount);
         }
-        
+        model.addObject("family",family);
 
         return model;
     }
