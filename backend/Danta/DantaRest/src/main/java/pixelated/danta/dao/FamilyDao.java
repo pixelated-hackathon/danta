@@ -6,6 +6,7 @@
 
 package pixelated.danta.dao;
 
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -26,15 +27,16 @@ public class FamilyDao {
     @Autowired
     Datasource datasource;
     
-    public BoFamily getByPhone(String phone) throws DaoUnexpectedException, DaoMessageException {
+    public BoFamily getByPhone(String phone,boolean validate) throws DaoUnexpectedException, DaoMessageException {
         try {
-            return datasource.findFistByField(BoFamily.class , "phone", phone, true);
+            return datasource.findFistByField(BoFamily.class , "phone", phone, validate);
         } catch (DaoNotFoundException ex) {
             throw new DaoMessageException("El número de teléfono no corresponde a ninguna familia registrada",ex);
         }
     }
 
     public BoFamilyTransaction saveTransaction(BoFamilyTransaction newFamilyTransaction) throws DaoUnexpectedException{
+        newFamilyTransaction.setCreateDate(new Date());
         return datasource.saveEntity(newFamilyTransaction);
     }
 
@@ -51,7 +53,11 @@ public class FamilyDao {
     }
     
     public List<BoFamilyTransaction> getTransactionsByFamilyId(String familyId) throws DaoUnexpectedException, DaoNotFoundException {
-        return datasource.findByField( BoFamilyTransaction.class , "familyId", familyId, false);
+        return datasource.findByField( BoFamilyTransaction.class , "familyId", familyId, OrderByCriteria.order("createDate", OrderType.DESC),false);
+    }
+
+    public BoFamily save(BoFamily family) throws DaoUnexpectedException {
+        return datasource.saveEntity(family);
     }
     
     

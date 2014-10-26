@@ -24,18 +24,27 @@ public class SMSDispatcher {
 
     private final String FAMILY_PAYMENT_PREFIX = "Pago";
     private final String FAMILY_FUNDS = "Saldo";
+    private final String FAMILY_TRANSACTIONS = "Cuenta";
+    private final String FAMILY_REGISTER = "Registrarse";
     @Autowired
     SMSDao smsDao;
-    
+
     @Autowired
     FamilyPaymentService familyPaymentLogicController;
-    
+    @Autowired
+    FamilyInformationService familyInformationService;
+
+    @Autowired
+    TestService testService;
+
     @Autowired
     ErrorHandler errorHandler;
 
     public boolean pushSMS(String phone, String content) {
         boolean result = true;
         try {
+            phone = formatPhone(phone);
+
             BoSMSLog newSMS = new BoSMSLog();
             newSMS.setContent(content);
             newSMS.setPhoneNumber(phone);
@@ -60,9 +69,21 @@ public class SMSDispatcher {
                 }
 
             } else if (contentParts[0].toUpperCase().equals(FAMILY_FUNDS.toUpperCase())) {
-                familyPaymentLogicController.notifyFundsToFamily (phone);
-                
-            }else {
+                result = familyPaymentLogicController.notifyFundsToFamily(phone);
+            } else if (contentParts[0].toUpperCase().equals(FAMILY_TRANSACTIONS.toUpperCase())) {
+                result = familyPaymentLogicController.notifyTransactions(phone);
+            } else if (contentParts[0].toUpperCase().equals(FAMILY_REGISTER.toUpperCase())) {
+
+                if (contentParts.length >= 3) {
+                    String firstName = contentParts[1];
+                    String lastName = contentParts[2];
+                    testService.registerFamily(phone, firstName, lastName);
+                    result = true;
+                } else {
+                    throw new DaoMessageException("El mensaje para pago debe de contener tres palabra,registrar + nombre + apellido");
+                }
+
+            } else {
                 throw new DaoMessageException("Primera palabra no permitida");
             }
         } catch (Exception ex) {
@@ -75,6 +96,7 @@ public class SMSDispatcher {
     public boolean pushToQueueSMS(String phone, String content) {
         boolean result = true;
         try {
+            phone = formatPhone(phone);
             BoPendingSMS newSMS = new BoPendingSMS();
             newSMS.setContent(content);
             newSMS.setPhoneNumber(phone);
@@ -94,5 +116,12 @@ public class SMSDispatcher {
             smsDao.deletePending(pendingSMSList.get(0));
             return pendingSMSList.get(0);
         }
+    }
+
+    public String formatPhone(String phone) {
+        if (phone.charAt(0) == '+') {
+            phone = phone.substring(4, phone.length());
+        }
+        return phone;
     }
 }

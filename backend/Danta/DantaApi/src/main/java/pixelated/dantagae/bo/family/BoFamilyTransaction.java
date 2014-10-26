@@ -23,6 +23,7 @@ public class BoFamilyTransaction extends DaoEntity {
     private Double amount;
     private String currencyCode;
     private String currencyDescription;
+    private String Description;
 
     /**
      * @return the familyId
@@ -134,6 +135,20 @@ public class BoFamilyTransaction extends DaoEntity {
      */
     public void setCurrencyDescription(String currencyDescription) {
         this.currencyDescription = currencyDescription;
+    }
+
+    /**
+     * @return the Description
+     */
+    public String getDescription() {
+        return Description;
+    }
+
+    /**
+     * @param Description the Description to set
+     */
+    public void setDescription(String Description) {
+        this.Description = Description;
     }
 	
 

@@ -15,7 +15,7 @@ import pixelated.dantagae.bo.DaoEntity;
 public class BoCurrency extends DaoEntity {
     
     public static final String CURRENCY_CODE = "COL";
-    public static final String CURRENCY_DESCRIPTION = "Colones";
+    public static final String CURRENCY_DESCRIPTION = "Granos";
     
     private String code;
     private String description;

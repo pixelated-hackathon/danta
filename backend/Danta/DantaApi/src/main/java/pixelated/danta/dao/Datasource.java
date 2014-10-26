@@ -7,13 +7,10 @@
 package pixelated.danta.dao;
 
 import java.util.List;
-import java.util.Map;
-import pixelated.danta.dao.exception.DaoException;
 import pixelated.danta.dao.exception.DaoNotFoundException;
 import pixelated.danta.dao.exception.DaoRequiredFieldException;
 import pixelated.danta.dao.exception.DaoUnexpectedException;
 import pixelated.dantagae.bo.DaoEntity;
-import pixelated.dantagae.sms.BoPendingSMS;
 
 /**
  *
@@ -30,6 +27,10 @@ public interface Datasource {
      <T extends DaoEntity> List<T> getAll(Class<T> entityClass) throws DaoUnexpectedException;
     
      <T extends DaoEntity> long drop(Class<T> entityClass);
+     
+     <T extends DaoEntity> List<T> findByFields(Class<T> entityClass, ParamBuilder values,OrderByCriteria order, boolean validate) throws DaoUnexpectedException,DaoNotFoundException;
+     
+    <T extends DaoEntity> List<T> findByField(Class<T> entityClass,String field, Object value,OrderByCriteria order, boolean validate) throws DaoUnexpectedException,DaoNotFoundException;
      
     <T extends DaoEntity> List<T> findByFields(Class<T> entityClass, ParamBuilder values, boolean validate) throws DaoUnexpectedException,DaoNotFoundException;
      

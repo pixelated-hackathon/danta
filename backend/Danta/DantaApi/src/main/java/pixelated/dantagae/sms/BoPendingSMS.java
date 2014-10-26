@@ -6,7 +6,6 @@
 
 package pixelated.dantagae.sms;
 
-import java.util.Date;
 import pixelated.dantagae.bo.DaoEntity;
 
 /**

@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.stereotype.Repository;
 import pixelated.danta.dao.Datasource;
+import pixelated.danta.dao.OrderByCriteria;
+import pixelated.danta.dao.OrderType;
 import pixelated.danta.dao.ParamBuilder;
 import pixelated.danta.dao.exception.DaoNotFoundException;
 import pixelated.danta.dao.exception.DaoRequiredFieldException;
@@ -165,12 +167,20 @@ public class Datastore implements Datasource {
         return keys.size();
     }
 
+    
     @Override
-    public <T extends DaoEntity> List<T> findByFields(Class<T> entityClass, ParamBuilder values, boolean validate) throws DaoUnexpectedException, DaoNotFoundException {
+    public <T extends DaoEntity> List<T> findByFields(Class<T> entityClass, ParamBuilder values, OrderByCriteria order, boolean validate) throws DaoUnexpectedException, DaoNotFoundException {
         List<T> results = new ArrayList<>();
         com.google.appengine.api.datastore.Query q = new com.google.appengine.api.datastore.Query(entityClass.getSimpleName());
         if (values.size() > 0) {
             q.setFilter(this.toDatastoreFilter(values));
+        }
+        if (order != null) {
+            if (order.getOrderType() == OrderType.ASC) {
+             q.addSort( order.getField() , Query.SortDirection.ASCENDING);
+            } else {
+             q.addSort( order.getField() , Query.SortDirection.DESCENDING);
+            }
         }
         PreparedQuery pq = datastore.prepare(q);
         for (Entity entity : pq.asIterable()) {
@@ -188,8 +198,18 @@ public class Datastore implements Datasource {
     }
 
     @Override
+    public <T extends DaoEntity> List<T> findByField(Class<T> entityClass, String field, Object value, OrderByCriteria order, boolean validate) throws DaoUnexpectedException, DaoNotFoundException {
+        return this.findByFields(entityClass, ParamBuilder.param(field, value),order, validate);
+    }
+    
+    @Override
+    public <T extends DaoEntity> List<T> findByFields(Class<T> entityClass, ParamBuilder values, boolean validate) throws DaoUnexpectedException, DaoNotFoundException {
+        return this.findByFields(entityClass, values,null, validate);
+    }
+
+    @Override
     public <T extends DaoEntity> List<T> findByField(Class<T> entityClass, String field, Object value, boolean validate) throws DaoUnexpectedException, DaoNotFoundException {
-        return this.findByFields(entityClass, ParamBuilder.param(field, value), validate);
+        return this.findByFields(entityClass, ParamBuilder.param(field, value),null, validate);
     }
 
     @Override
@@ -237,5 +257,6 @@ public class Datastore implements Datasource {
         Key key = KeyFactory.stringToKey(entity.getId());
         datastore.delete(key);
     }
+
 
 }

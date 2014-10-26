@@ -13,9 +13,7 @@ import org.springframework.stereotype.Service;
 import pixelated.danta.dao.Datasource;
 import pixelated.danta.dao.FamilyDao;
 import pixelated.danta.service.logic.ErrorHandler;
-import pixelated.dantagae.bo.commerce.BoCommerce;
 import pixelated.dantagae.bo.family.BoFamily;
-import pixelated.dantagae.bo.family.BoFamilyMember;
 /**
  *
  * @author william
@@ -45,6 +43,15 @@ public class FamilyInformationService {
             return familyDao.getAll();
         }catch (Exception ex) {
             ErrorHandler.handleError(this.getClass(), ex);
+            return null;
+        }
+    }
+    
+    public BoFamily registerFamily(BoFamily family) {
+        try{
+            return familyDao.save(family);
+        }catch (Exception ex) {
+            Logger.getLogger(this.getClass().toString()).log(Level.SEVERE, null, ex);
             return null;
         }
     }
