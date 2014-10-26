@@ -6,6 +6,7 @@
 
 package pixelated.dantagae.bo.family;
 
+import java.util.Date;
 import pixelated.dantagae.bo.DaoEntity;
 
 /**
@@ -17,7 +18,11 @@ public class BoFamilyMember extends DaoEntity {
     private String familyId;
     private String firstName;
     private String lastName;
-    private boolean household;
+    private String idCard;
+    private String occupationDescription;
+    private Date birthday;
+    
+    private String household;
 
     /**
      * @return the firstName
@@ -50,14 +55,14 @@ public class BoFamilyMember extends DaoEntity {
     /**
      * @return the household
      */
-    public boolean isHousehold() {
+    public String isHousehold() {
         return household;
     }
 
     /**
      * @param household the household to set
      */
-    public void setHousehold(boolean household) {
+    public void setHousehold(String household) {
         this.household = household;
     }
 
@@ -73,6 +78,48 @@ public class BoFamilyMember extends DaoEntity {
      */
     public void setFamilyId(String familyId) {
         this.familyId = familyId;
+    }
+
+    /**
+     * @return the idCard
+     */
+    public String getIdCard() {
+        return idCard;
+    }
+
+    /**
+     * @param idCard the idCard to set
+     */
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
+
+    /**
+     * @return the occupationDescription
+     */
+    public String getOccupationDescription() {
+        return occupationDescription;
+    }
+
+    /**
+     * @param occupationDescription the occupationDescription to set
+     */
+    public void setOccupationDescription(String occupationDescription) {
+        this.occupationDescription = occupationDescription;
+    }
+
+    /**
+     * @return the birthday
+     */
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    /**
+     * @param birthday the birthday to set
+     */
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
     }
     
 }

@@ -22,5 +22,6 @@
     </bean>
     
     <mvc:annotation-driven />
+    <mvc:resources mapping="/resources/**" location="/resources/main/" />
 <!--    <mongo:repositories base-package="test.dao"/>-->
 </beans>
