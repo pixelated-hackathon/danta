@@ -1,0 +1,82 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Oct 25, 2014, 9:37:48 PM
+    Author     : william
+*/
+body{
+    background-image: url(../source/background2.png);  
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: 50% 100%;
+    background-color: black;
+}
+
+.rightpane{
+    background-image: url(../source/rightpane.png);
+    float: right;
+    width: 200px;
+    margin-top: 0px;
+    height: 700px;
+    margin-right: 25%;
+    text-align: center;
+    color: white;
+}
+
+.content{
+    float: left;
+}
+
+.jefeback{
+    margin-left: 322px;
+    margin-top: 70px;
+    width: 500px;
+    height: 150px;
+}
+
+.jefebackimg{
+    width: 560px;
+    height: 165px;
+    margin-left: 0px;
+}
+
+.memberback{
+    margin-left: 326px;
+    margin-top: 35px;
+    height: 115px;
+    width: 400px;
+}
+
+.memberbackimg{
+    width: 400px;
+    height: 135px;
+    margin-left: 0px;
+}
+
+.memberback2{
+    width: 400px;
+    height: 115px;
+    margin-top: 0px;
+    margin-left: 325px;
+}
+
+.memberback2img{
+    width: 400px;
+    height: 135px;
+}
+
+.memberback3{
+    width: 400px;
+    height: 100px;
+    margin-top: 0px;
+    margin-left: 325px;
+}
+
+.memberback3img{
+    width: 400px;
+    height: 135px;
+}

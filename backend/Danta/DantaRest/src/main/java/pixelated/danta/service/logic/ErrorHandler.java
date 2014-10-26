@@ -37,9 +37,9 @@ public class ErrorHandler {
             BoPendingSMS pendingSMS = new BoPendingSMS();
             pendingSMS.setPhoneNumber(sourcePhoneNumber);
             if (additionalMessage == null) {
-                pendingSMS.setContent("Ocurrió un error desconocido durante la transacción");
+                pendingSMS.setContent("Se encontró un problema, intente de nuevo más tarde");
             } else {
-                pendingSMS.setContent("Ocurrió un error durante la transacción: " + additionalMessage);
+                pendingSMS.setContent("Se encontró un problema en la transacción: " + additionalMessage);
             }
             smsDao.savePending(pendingSMS);
 

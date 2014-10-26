@@ -15,12 +15,14 @@ import org.springframework.web.servlet.ModelAndView;
 import pixelated.danta.service.FamilyInformationService;
 import pixelated.danta.service.FamilyPaymentService;
 import pixelated.dantagae.bo.family.BoFamily;
+
 /**
  *
  * @author william
  */
 @Controller
 public class SEASController {
+
     @Autowired
     private FamilyInformationService familyService;
     
@@ -42,19 +44,19 @@ public class SEASController {
        
        return model;
     }
-    
+
     @ResponseBody
     @RequestMapping(value = "/ExpedienteDigital/AgregarExpediente", method = RequestMethod.GET, params = {"phone"})
     public ModelAndView AgregarExpediente(@RequestParam("phone") String phone) {
-       ModelAndView model = new ModelAndView("redirect:/web/ExpedienteDigital/Consulta");
-       
-       BoFamily family = familyService.findByPhone(phone);
-       
-       model.addObject("family", family);
-       
-       return model;
+        ModelAndView model = new ModelAndView("redirect:/web/ExpedienteDigital/Consulta");
+
+        BoFamily family = familyService.findByPhone(phone);
+
+        model.addObject("family", family);
+
+        return model;
     }
-    
+
     @ResponseBody
     @RequestMapping(value = "/ExpedienteDigital/HistorialTransacciones", method = RequestMethod.GET, params = {"phone"})
     public ModelAndView HistorialTransacciones(@RequestParam("phone") String phone) {
@@ -67,15 +69,20 @@ public class SEASController {
        
        return model;
     }
-    
+
     @ResponseBody
-    @RequestMapping(value = "/ExpedienteDigital/Desembolso", method = RequestMethod.GET)
-    public ModelAndView Desembolso() {
-       ModelAndView model = new ModelAndView("desembolso");
-       
-       //testService.install();
-       
-       return model;
+    @RequestMapping(value = "/ExpedienteDigital/Desembolso", method = RequestMethod.GET, params = {"phone"})
+    public ModelAndView Desembolso(@RequestParam("phone") String phone, @RequestParam(value = "amount", required = false) Double amount) {
+        ModelAndView model = new ModelAndView("desembolso");
+        model.addObject("phone", phone);
+        if (amount != null) {
+            BoFamily family = familyService.findByPhone(phone);
+            familyPaymentService.addFunds(family.getId(), amount);
+            model.addObject("amount", amount);
+        }
+        
+
+        return model;
     }
 
     /**
