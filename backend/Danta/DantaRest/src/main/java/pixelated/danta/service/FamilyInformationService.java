@@ -48,4 +48,13 @@ public class FamilyInformationService {
             return null;
         }
     }
+    
+    public List<BoFamilyMember> getMembers(String familyId){
+        try{
+            return familyDao.getMembers(familyId);
+        }catch (Exception ex) {
+            ErrorHandler.handleError(this.getClass(), ex);
+            return null;
+        }
+    }
 }
