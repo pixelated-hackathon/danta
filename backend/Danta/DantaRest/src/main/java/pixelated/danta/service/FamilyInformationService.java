@@ -73,7 +73,11 @@ public class FamilyInformationService {
                     BoFamilyMember newMember = new BoFamilyMember();
                     newMember.setFirstName(member.getFirstName());
                     newMember.setLastName(member.getLastName());
-                    newMember.setHousehold(member.isHousehold());
+                    if (member.isHousehold()) {
+                        newMember.setHousehold("1" );
+                    } else {
+                        newMember.setHousehold("0" );
+                    }
                     newMember.setFamilyId(newFamily.getId());
                     familyDao.save(newMember);
                 }
@@ -88,6 +92,26 @@ public class FamilyInformationService {
 
         } catch (Exception ex) {
             Logger.getLogger(this.getClass().toString()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
+    
+    public List<BoFamilyMember> getMembers(String familyId){
+        try{
+            return familyDao.getMembers(familyId);
+        }catch (Exception ex) {
+            ErrorHandler.handleError(this.getClass(), ex);
+
+            return null;
+        }
+    }
+    
+    public BoFamilyMember getHold(String familyId){
+        try{
+            return familyDao.getHold(familyId).get(0);
+        }catch (Exception ex) {
+            ErrorHandler.handleError(this.getClass(), ex);
+
             return null;
         }
     }

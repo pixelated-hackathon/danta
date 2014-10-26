@@ -68,6 +68,14 @@ public class FamilyDao {
     public List<BoFamilyMember> getMembers(String id) throws DaoUnexpectedException, DaoNotFoundException{
        ParamBuilder param = new ParamBuilder();
        param.add("familyId",id);
+       param.add("houseHold", "0");
+       return datasource.findByFields(BoFamilyMember.class, param, true);
+    }
+    
+    public List<BoFamilyMember> getHold(String id) throws DaoUnexpectedException, DaoNotFoundException{
+       ParamBuilder param = new ParamBuilder();
+       param.add("familyId",id);
+       param.add("houseHold", "1");
        
        return datasource.findByFields(BoFamilyMember.class, param, true);
     }

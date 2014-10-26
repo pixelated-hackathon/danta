@@ -5,7 +5,10 @@
  */
 package pixelated.danta.service;
 
+import com.google.appengine.api.search.DateUtil;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +18,7 @@ import pixelated.danta.dao.FamilyDao;
 import pixelated.danta.dao.exception.DaoAlreadyExistsException;
 import pixelated.danta.dao.exception.DaoMessageException;
 import pixelated.danta.dao.exception.DaoUnexpectedException;
+import pixelated.danta.dao.utils.DateUtils;
 import pixelated.danta.entities.Family;
 import pixelated.danta.entities.FamilyMember;
 import pixelated.dantagae.bo.commerce.BoCommerce;
@@ -60,14 +64,55 @@ public class TestService {
             BoFamilyMember newMember = new BoFamilyMember();
             newMember.setFirstName("Mario");
             newMember.setLastName("Rodriguez");
-            newMember.setHousehold(true);
+            newMember.setHousehold("1");
             newMember.setFamilyId(testFamily.getId());
+            newMember.setIdCard("115600192019");
+            
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            cal.add(Calendar.YEAR, -28);
+            newMember.setBirthday(cal.getTime());
+            newMember.setOccupationDescription("Estudiante");
             datasource.saveEntity(newMember);
             newMember = new BoFamilyMember();
             newMember.setFirstName("Kevin");
             newMember.setLastName("Rodriguez");
-            newMember.setHousehold(false);
+            newMember.setHousehold("1");
             newMember.setFamilyId(testFamily.getId());
+            newMember.setIdCard("115600009136");
+            
+            cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            cal.add(Calendar.YEAR, -13);
+            
+            newMember.setBirthday(cal.getTime());
+            newMember.setOccupationDescription("Cocinero");
+            datasource.saveEntity(newMember);
+            newMember = new BoFamilyMember();
+            newMember.setFirstName("Cesar");
+            newMember.setLastName("Rodriguez");
+            newMember.setHousehold("0");
+            newMember.setFamilyId(testFamily.getId());
+            newMember.setIdCard("00700929234");
+            cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            cal.add(Calendar.YEAR, -40);
+            
+            newMember.setBirthday(cal.getTime());
+            newMember.setOccupationDescription("Estudiante");
+            datasource.saveEntity(newMember);
+            newMember = new BoFamilyMember();
+            newMember.setFirstName("Maria");
+            newMember.setLastName("Rodriguez");
+            newMember.setHousehold("0");
+            newMember.setFamilyId(testFamily.getId());
+            newMember.setIdCard("09092341234234");
+            cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            cal.add(Calendar.YEAR, -16);
+            
+            newMember.setBirthday(cal.getTime());
+            newMember.setOccupationDescription("Estudiante");
             datasource.saveEntity(newMember);
 
             testFamily = new BoFamily();
@@ -79,13 +124,13 @@ public class TestService {
             newMember = new BoFamilyMember();
             newMember.setFirstName("Ana");
             newMember.setLastName("Castro");
-            newMember.setHousehold(true);
+            newMember.setHousehold("1");
             newMember.setFamilyId(testFamily.getId());
             datasource.saveEntity(newMember);
             newMember = new BoFamilyMember();
             newMember.setFirstName("Carlos");
             newMember.setLastName("Rodriguez");
-            newMember.setHousehold(false);
+            newMember.setHousehold("1");
             newMember.setFamilyId(testFamily.getId());
             datasource.saveEntity(newMember);
 
