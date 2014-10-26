@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import pixelated.danta.service.FamilyInformationService;
+import pixelated.danta.service.FamilyPaymentService;
 import pixelated.dantagae.bo.family.BoFamily;
 /**
  *
@@ -22,6 +23,9 @@ import pixelated.dantagae.bo.family.BoFamily;
 public class SEASController {
     @Autowired
     private FamilyInformationService familyService;
+    
+    @Autowired
+    private FamilyPaymentService payment;
     
     @ResponseBody
     @RequestMapping(value = "/ExpedienteDigital/Consulta", method = RequestMethod.GET, params = {"phone"})
@@ -33,6 +37,8 @@ public class SEASController {
        model.addObject("family", family);
        model.addObject("hold",getFamilyService().getHold(family.getId()));
        model.addObject("members",getFamilyService().getMembers(family.getId()));
+       
+       payment.doPayment("87040233", "70509709", 10000.00);
        
        return model;
     }
@@ -57,6 +63,7 @@ public class SEASController {
        BoFamily family = familyService.findByPhone(phone);
        
        model.addObject("family", family);
+       model.addObject("transactions",familyService.getTransactions(family.getId()));
        
        return model;
     }
@@ -83,5 +90,19 @@ public class SEASController {
      */
     public void setFamilyService(FamilyInformationService familyService) {
         this.familyService = familyService;
+    }
+
+    /**
+     * @return the payment
+     */
+    public FamilyPaymentService getPayment() {
+        return payment;
+    }
+
+    /**
+     * @param payment the payment to set
+     */
+    public void setPayment(FamilyPaymentService payment) {
+        this.payment = payment;
     }
 }
