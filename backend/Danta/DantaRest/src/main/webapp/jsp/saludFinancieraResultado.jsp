@@ -15,6 +15,7 @@
         <link href="<c:url value="/resources/main/css/expedienteDigitalSaludFinanciero.css" />" rel="stylesheet">
         <link rel="stylesheet" type="text/css" href='http://fonts.googleapis.com/css?family=Roboto'>
         <link rel="stylesheet" type="text/css" href='http://fonts.googleapis.com/css?family=Droid+Sans'>
+        
     </head>
     <body>
         <div style="width: 700px;z-index: -1;position: absolute;left: 387px;top: 7PX;color: darkgrey;font-size: 17px; font-family:sans-serif ;letter-spacing: 3px;">PRINCIPAL |  CONSULTA </div>
@@ -36,7 +37,10 @@
             <div style="width: 250px;z-index: -1;position: absolute;left: 370px;top: 56px;color: white;font-size: 35px;font-family: Roboto; font-weight: bold">Familia ${family.familyLastName}</div>
             <div style="width: 450px;z-index: -1;position: absolute;left: 370px;top: 150px;color: white;font-size: 20px; font-family: sans-serif;">Resultado de comparación de ingresos y egresos</div>
             <div style="width: 200px;z-index: 1;position: absolute;left: 320px;top: 200px;color: white;font-size: 20px; font-family: sans-serif;"><img style="width: 570px;" src="<c:url value="/resources/main/source/GRAFICO.png" />"/></div>
+            
+            <div style="width: 450px;z-index: -1;position: absolute;left: 370px;top: 515px;color: white;font-size: 20px; font-family: sans-serif;">Resultado de ahorros</div>
+            <div style="width: 200px;z-index: 1;position: absolute;left: 320px;top: 550px;color: white;font-size: 20px; font-family: sans-serif;"><img style="width: 570px;" src="<c:url value="/resources/main/source/ahorros.png" />"/></div>
         </div>
-        
+            
     </body>
 </html>
