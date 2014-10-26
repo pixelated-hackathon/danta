@@ -7,6 +7,7 @@
 package pixelated.danta.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import pixelated.danta.dao.exception.DaoMessageException;
 import pixelated.danta.dao.exception.DaoNotFoundException;
 import pixelated.danta.dao.exception.DaoUnexpectedException;
@@ -16,6 +17,7 @@ import pixelated.dantagae.bo.commerce.BoCommerce;
  *
  * @author Juan Carlos Rojas
  */
+@Repository
 public class CommerceDao {
     
     @Autowired

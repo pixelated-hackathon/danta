@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import pixelated.danta.dao.CommerceDao;
 import pixelated.danta.dao.SMSDao;
 import pixelated.danta.dao.exception.DaoException;
+import pixelated.danta.dao.exception.DaoMessageException;
+import pixelated.danta.service.logic.ErrorHandler;
 import pixelated.dantagae.sms.BoPendingSMS;
 import pixelated.dantagae.sms.BoSMSLog;
 
@@ -27,19 +29,33 @@ public class SMSDispatcher {
     SMSDao smsDao;
     @Autowired
     FamilyPaymentLogicController familyPaymentLogicController;
+    
+    @Autowired
+    ErrorHandler errorHandler;
 
     public boolean pushSMS(String phone, String content) throws DaoException {
         boolean result = false;
         try {
-            
-            
-            
             BoSMSLog newSMS = new BoSMSLog();
             newSMS.setContent(content);
             newSMS.setPhoneNumber(phone);
             smsDao.saveLog(newSMS);
+            
+            String[] contentParts = content.split(" ");
+            if (contentParts.length == 0) {
+                throw new DaoMessageException("El mensaje debe de contener espacios");
+            }
+            
+            if (contentParts[1].toUpperCase().equals( PAYMENT_PREFIX )) {
+                
+            }
+            
+            
+            
+            
             result = true;
-        } catch (Exception ex) {
+        } catch (Exception ex) { 
+            errorHandler.handleSMSError(this.getClass(), phone, ex);
             result = false;
         }
         return result;
