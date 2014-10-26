@@ -14,6 +14,7 @@ import pixelated.danta.dao.exception.DaoNotFoundException;
 import pixelated.danta.dao.exception.DaoRequiredFieldException;
 import pixelated.danta.dao.exception.DaoUnexpectedException;
 import pixelated.dantagae.bo.family.BoFamily;
+import pixelated.dantagae.bo.family.BoFamilyMember;
 import pixelated.dantagae.bo.family.BoFamilyTransaction;
 
 /**
@@ -48,9 +49,13 @@ public class FamilyDao {
 
     public List<BoFamily> getAll() throws DaoUnexpectedException {
        return datasource.getAll(BoFamily.class);
-        
     }
     
-    
+    public List<BoFamilyMember> getMembers(String id) throws DaoUnexpectedException, DaoNotFoundException{
+       ParamBuilder param = new ParamBuilder();
+       param.add("familyId",id);
+       
+       return datasource.findByFields(BoFamilyMember.class, param, true);
+    }
     
 }
