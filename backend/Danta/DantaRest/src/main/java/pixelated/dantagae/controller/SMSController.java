@@ -29,7 +29,7 @@ public class SMSController {
     
     @ResponseBody
     @RequestMapping(value = "/sms/push",method = RequestMethod.POST, params = {"phone","content"})
-    public boolean pushSMS(@RequestParam("phone") String phone,@RequestParam("content") String content) throws DaoException {
+    public boolean pushSMS(@RequestParam("phone") String phone,@RequestParam("content") String content) {
         return smsService.pushSMS(phone,content);
     }
     
