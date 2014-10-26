@@ -56,6 +56,15 @@ public class FamilyInformationService {
             return null;
         }
     }
+    
+    public BoFamily findByPhone(String phone) {
+        try {
+            return familyDao.getByPhone(phone, false);
+        } catch (Exception ex) {
+            ErrorHandler.handleError(this.getClass(), ex);
+            return null;
+        }
+    }
 
     public Family registerFamily(Family family) {
         try {
@@ -65,7 +74,7 @@ public class FamilyInformationService {
             newFamily.setFunds(0d);
             newFamily.setPhone(family.getPhone());
             newFamily = familyDao.save(newFamily);
-            newFamily.setId(newFamily.getId());
+            family.setId(newFamily.getId());
             
             
             if (family.getMembers() != null) {
@@ -85,7 +94,7 @@ public class FamilyInformationService {
 
             BoPendingSMS pendingSMS = new BoPendingSMS();
             pendingSMS.setPhoneNumber(family.getPhone());
-            pendingSMS.setContent("Estimada familia "+ family.getFamilyLastName() +" ,Le notificamos que su familia ha sido aprobada para el programa de apoyo económico danta");
+            pendingSMS.setContent("Su familia ha sido aprobada para el programa de apoyo económico SEAS");
             smsDao.savePending(pendingSMS);
 
             return family;

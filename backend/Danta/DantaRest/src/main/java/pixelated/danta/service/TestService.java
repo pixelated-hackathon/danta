@@ -152,7 +152,7 @@ public class TestService {
 
         BoFamily existingFamily  = familyDao.getByPhone(number,false);
         if (existingFamily != null) {
-            throw new DaoMessageException("Ya existe una familia con el número de teléfono");
+            throw new DaoMessageException("Ya existe un beneficiario con el número de teléfono");
         }
         
         Family testFamily = new Family();
