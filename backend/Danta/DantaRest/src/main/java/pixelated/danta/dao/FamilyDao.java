@@ -32,7 +32,7 @@ public class FamilyDao {
         try {
             return datasource.findFistByField(BoFamily.class , "phone", phone, validate);
         } catch (DaoNotFoundException ex) {
-            throw new DaoMessageException("El número de teléfono no corresponde a ninguna familia registrada",ex);
+            throw new DaoMessageException("El número de teléfono no corresponde a ningún beneficiario",ex);
         }
     }
 

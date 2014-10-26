@@ -13,6 +13,7 @@ import pixelated.danta.dao.CommerceDao;
 import pixelated.danta.dao.FamilyDao;
 import pixelated.danta.dao.GlobalDao;
 import pixelated.danta.dao.SMSDao;
+import pixelated.danta.dao.exception.DaoMessageException;
 import pixelated.danta.dao.utils.DateUtils;
 import pixelated.danta.service.logic.ErrorHandler;
 import pixelated.dantagae.bo.commerce.BoCommerce;
@@ -40,8 +41,8 @@ public class FamilyPaymentService {
     @Autowired
     GlobalDao globalDao;
 
-    private final String ADD_FOUNDS_DESCRIPTION = "Depósito de IMAS";
-    private final String PAYMENT_DESCRIPTION = "Pago a comercio";
+    private final String ADD_FOUNDS_DESCRIPTION = "Desembolso IMAS";
+    private final String PAYMENT_DESCRIPTION = "Pago";
 
     public boolean doPayment(String familyPhone, String commercePhone, Double amount) {
         try {
@@ -49,6 +50,11 @@ public class FamilyPaymentService {
             BoCommerce commerce = commerceDao.getByPhone(commercePhone);
             BoCurrency currency = globalDao.getDefaultCurreny();
 
+            if (family.getFunds() < amount) {
+                throw new DaoMessageException("Fondos insuficientes");
+            }
+            
+            
             BoFamilyTransaction newFamilyTransaction = new BoFamilyTransaction();
             newFamilyTransaction.setCommerceId(commerce.getId());
             newFamilyTransaction.setCommerceDescription(commerce.getName());
@@ -66,7 +72,7 @@ public class FamilyPaymentService {
 
             BoPendingSMS pendingSMS = new BoPendingSMS();
             pendingSMS.setPhoneNumber(commercePhone);
-            pendingSMS.setContent("Se le confirma el pago de la familia " + family.getFamilyLastName() + " por " +Math.abs(newFamilyTransaction.getAmount()) + " " + newFamilyTransaction.getCurrencyDescription());
+            pendingSMS.setContent("Recibido pago del beneficiario " + family.getFamilyLastName() + " por " +Math.abs(newFamilyTransaction.getAmount()) + " " + newFamilyTransaction.getCurrencyDescription());
             smsDao.savePending(pendingSMS);
 
             return true;
@@ -97,7 +103,7 @@ public class FamilyPaymentService {
             
             BoPendingSMS pendingSMS = new BoPendingSMS();
             pendingSMS.setPhoneNumber(family.getPhone());
-            pendingSMS.setContent("Estimada " + family.getFamilyLastName() + ", se le confirma que se le ha realizado un depósito por "+amount+" "+BoCurrency.CURRENCY_DESCRIPTION);
+            pendingSMS.setContent("Ha recibido un desembolso del IMAS por "+amount+" "+BoCurrency.CURRENCY_DESCRIPTION);
             smsDao.savePending(pendingSMS);
 
             
@@ -117,7 +123,7 @@ public class FamilyPaymentService {
 
             BoPendingSMS pendingSMS = new BoPendingSMS();
             pendingSMS.setPhoneNumber(familyPhone);
-            pendingSMS.setContent("Su familia dispone " + family.getFunds() + " " + currency.getDescription());
+            pendingSMS.setContent("Usted dispone de " + family.getFunds() + " " + currency.getDescription());
             smsDao.savePending(pendingSMS);
 
             return true;
@@ -135,14 +141,14 @@ public class FamilyPaymentService {
             StringBuilder transactionBuilder = new StringBuilder();
 
             if (transactions.isEmpty()) {
-                transactionBuilder.append("Su familia no tiene transacciones registradas");
+                transactionBuilder.append("No tiene transacciones registradas");
             } else {
-                transactionBuilder.append("Su familia ha realizado las siguientes transacciones: \n");
+                transactionBuilder.append("Ha realizado las siguientes transacciones: \n");
                 for (BoFamilyTransaction transaction : transactions) {
                     if (transaction.getCommerceId() != null && transaction.getCommerceId().length() > 0) {
-                        transactionBuilder.append(transaction.getDescription() + " | " + DateUtils.formatDate(transaction.getCreateDate()) + " comercio: " + transaction.getCommerceDescription() + " cantidad: " + Math.abs(transaction.getAmount()) + "\n");
+                        transactionBuilder.append(transaction.getDescription() + " " + DateUtils.formatDate(transaction.getCreateDate()) + " comercio: " + transaction.getCommerceDescription() + " monto: " + Math.abs(transaction.getAmount()) + "\n");
                     } else {
-                        transactionBuilder.append(transaction.getDescription() + " | " + DateUtils.formatDate( transaction.getCreateDate()) + " cantidad: " + Math.abs(transaction.getAmount()) + "\n");
+                        transactionBuilder.append(transaction.getDescription() + " " + DateUtils.formatDate( transaction.getCreateDate()) + " monto: " + Math.abs(transaction.getAmount()) + "\n");
                     }
                 }
             }

@@ -65,7 +65,7 @@ public class FamilyInformationService {
             newFamily.setFunds(0d);
             newFamily.setPhone(family.getPhone());
             newFamily = familyDao.save(newFamily);
-            newFamily.setId(newFamily.getId());
+            family.setId(newFamily.getId());
             
             
             if (family.getMembers() != null) {
@@ -81,7 +81,7 @@ public class FamilyInformationService {
 
             BoPendingSMS pendingSMS = new BoPendingSMS();
             pendingSMS.setPhoneNumber(family.getPhone());
-            pendingSMS.setContent("Estimada familia "+ family.getFamilyLastName() +" ,Le notificamos que su familia ha sido aprobada para el programa de apoyo económico danta");
+            pendingSMS.setContent("Su familia ha sido aprobada para el programa de apoyo económico SEAS");
             smsDao.savePending(pendingSMS);
 
             return family;

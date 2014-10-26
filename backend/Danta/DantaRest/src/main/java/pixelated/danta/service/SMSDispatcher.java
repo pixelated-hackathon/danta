@@ -51,9 +51,6 @@ public class SMSDispatcher {
             smsDao.saveLog(newSMS);
 
             String[] contentParts = content.split(" ");
-            if (contentParts.length == 0) {
-                throw new DaoMessageException("El mensaje debe de contener espacios");
-            }
 
             if (contentParts[0].toUpperCase().equals(FAMILY_PAYMENT_PREFIX.toUpperCase())) {
                 if (contentParts.length >= 3) {
@@ -65,7 +62,7 @@ public class SMSDispatcher {
                         throw new DaoMessageException("El monto a pagar no es un número correcto");
                     }
                 } else {
-                    throw new DaoMessageException("El mensaje para pago debe de contener tres palabra, Pago + número de teléfono del comercio + monto a pagar");
+                    throw new DaoMessageException("El mensaje para pago debe de contener tres palabras, Pago + número de teléfono del comercio + monto a pagar");
                 }
 
             } else if (contentParts[0].toUpperCase().equals(FAMILY_FUNDS.toUpperCase())) {
@@ -80,11 +77,11 @@ public class SMSDispatcher {
                     testService.registerFamily(phone, firstName, lastName);
                     result = true;
                 } else {
-                    throw new DaoMessageException("El mensaje para pago debe de contener tres palabra,registrar + nombre + apellido");
+                    throw new DaoMessageException("El mensaje para registrar debe de contener tres palabras, Registrar + nombre + apellido");
                 }
 
             } else {
-                throw new DaoMessageException("Primera palabra no permitida");
+                throw new DaoMessageException("Mensaje no reconocido");
             }
         } catch (Exception ex) {
             errorHandler.handleSMSError(this.getClass(), phone, ex);
