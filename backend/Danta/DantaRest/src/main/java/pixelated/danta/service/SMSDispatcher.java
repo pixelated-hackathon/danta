@@ -22,11 +22,20 @@ import pixelated.dantagae.sms.BoSMSLog;
 @Service
 public class SMSDispatcher {
 
-    private final String PAYMENT_PREFIX = "Pago";
+    private final String FAMILY_PAYMENT_PREFIX = "Pago";
+    private final String FAMILY_FUNDS = "Saldo";
+    private final String FAMILY_TRANSACTIONS = "Cuenta";
+    private final String FAMILY_REGISTER = "Registrarse";
     @Autowired
     SMSDao smsDao;
+
     @Autowired
-    FamilyPaymentLogicController familyPaymentLogicController;
+    FamilyPaymentService familyPaymentLogicController;
+    @Autowired
+    FamilyInformationService familyInformationService;
+
+    @Autowired
+    TestService testService;
 
     @Autowired
     ErrorHandler errorHandler;
@@ -34,6 +43,8 @@ public class SMSDispatcher {
     public boolean pushSMS(String phone, String content) {
         boolean result = true;
         try {
+            phone = formatPhone(phone);
+
             BoSMSLog newSMS = new BoSMSLog();
             newSMS.setContent(content);
             newSMS.setPhoneNumber(phone);
@@ -44,8 +55,8 @@ public class SMSDispatcher {
                 throw new DaoMessageException("El mensaje debe de contener espacios");
             }
 
-            if (contentParts[0].toUpperCase().equals(PAYMENT_PREFIX)) {
-                if (contentParts.length > 3) {
+            if (contentParts[0].toUpperCase().equals(FAMILY_PAYMENT_PREFIX.toUpperCase())) {
+                if (contentParts.length >= 3) {
                     String commerceNumber = contentParts[1];
                     try {
                         Double amount = Double.parseDouble(contentParts[2]);
@@ -55,6 +66,21 @@ public class SMSDispatcher {
                     }
                 } else {
                     throw new DaoMessageException("El mensaje para pago debe de contener tres palabra, Pago + número de teléfono del comercio + monto a pagar");
+                }
+
+            } else if (contentParts[0].toUpperCase().equals(FAMILY_FUNDS.toUpperCase())) {
+                result = familyPaymentLogicController.notifyFundsToFamily(phone);
+            } else if (contentParts[0].toUpperCase().equals(FAMILY_TRANSACTIONS.toUpperCase())) {
+                result = familyPaymentLogicController.notifyTransactions(phone);
+            } else if (contentParts[0].toUpperCase().equals(FAMILY_REGISTER.toUpperCase())) {
+
+                if (contentParts.length >= 3) {
+                    String firstName = contentParts[1];
+                    String lastName = contentParts[2];
+                    testService.registerFamily(phone, firstName, lastName);
+                    result = true;
+                } else {
+                    throw new DaoMessageException("El mensaje para pago debe de contener tres palabra,registrar + nombre + apellido");
                 }
 
             } else {
@@ -70,6 +96,7 @@ public class SMSDispatcher {
     public boolean pushToQueueSMS(String phone, String content) {
         boolean result = true;
         try {
+            phone = formatPhone(phone);
             BoPendingSMS newSMS = new BoPendingSMS();
             newSMS.setContent(content);
             newSMS.setPhoneNumber(phone);
@@ -81,8 +108,20 @@ public class SMSDispatcher {
         return result;
     }
 
-    public List<BoPendingSMS> pullSMS() throws DaoException {
-        return smsDao.getAllPendings();
+    public BoPendingSMS pullSMS() throws DaoException {
+        List<BoPendingSMS> pendingSMSList = smsDao.getAllPendings();
+        if (pendingSMSList.isEmpty()) {
+            return new BoPendingSMS();
+        } else {
+            smsDao.deletePending(pendingSMSList.get(0));
+            return pendingSMSList.get(0);
+        }
     }
 
+    public String formatPhone(String phone) {
+        if (phone.charAt(0) == '+') {
+            phone = phone.substring(4, phone.length());
+        }
+        return phone;
+    }
 }

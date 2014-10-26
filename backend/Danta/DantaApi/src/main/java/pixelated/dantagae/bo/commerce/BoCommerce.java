@@ -13,7 +13,7 @@ import pixelated.dantagae.bo.*;
  * @author Juan Carlos Rojas
  */
 public class BoCommerce extends DaoEntity {
-  
+    
     private String name;
     private String ownerFirstName;
     private String ownerLastName;

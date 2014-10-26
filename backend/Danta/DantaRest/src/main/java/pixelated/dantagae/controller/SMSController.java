@@ -9,6 +9,7 @@ package pixelated.dantagae.controller;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,14 +29,15 @@ public class SMSController {
     SMSDispatcher smsService;
     
     @ResponseBody
-    @RequestMapping(value = "/sms/push",method = RequestMethod.POST, params = {"phone","content"})
-    public boolean pushSMS(@RequestParam("phone") String phone,@RequestParam("content") String content) {
-        return smsService.pushSMS(phone,content);
+    @RequestMapping(value = "/sms/push",method = RequestMethod.POST)
+    public boolean pushSMS(@RequestBody BoPendingSMS newSms) {
+        return smsService.pushSMS(newSms.getPhoneNumber(),newSms.getContent());
     }
     
     @ResponseBody
     @RequestMapping(value = "/sms/pull",method = RequestMethod.GET)
-    public List<BoPendingSMS> pullSMS() throws DaoException {
+    public BoPendingSMS pullSMS() throws DaoException {
         return smsService.pullSMS();
     }
+    
 }
