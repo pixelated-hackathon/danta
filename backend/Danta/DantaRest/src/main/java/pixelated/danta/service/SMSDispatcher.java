@@ -6,6 +6,8 @@
 package pixelated.danta.service;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pixelated.danta.dao.SMSDao;
@@ -26,6 +28,10 @@ public class SMSDispatcher {
     private final String FAMILY_FUNDS = "Saldo";
     private final String FAMILY_TRANSACTIONS = "Cuenta";
     private final String FAMILY_REGISTER = "Registrarse";
+    private final String WIKI_SEARCH = "Wiki";
+
+    private int SMS_LENGTH = 160;
+
     @Autowired
     SMSDao smsDao;
 
@@ -33,6 +39,9 @@ public class SMSDispatcher {
     FamilyPaymentService familyPaymentLogicController;
     @Autowired
     FamilyInformationService familyInformationService;
+
+    @Autowired
+    WikipediaService wikiService;
 
     @Autowired
     TestService testService;
@@ -69,6 +78,35 @@ public class SMSDispatcher {
                 result = familyPaymentLogicController.notifyFundsToFamily(phone);
             } else if (contentParts[0].toUpperCase().equals(FAMILY_TRANSACTIONS.toUpperCase())) {
                 result = familyPaymentLogicController.notifyTransactions(phone);
+            } else if (contentParts[0].toUpperCase().equals(WIKI_SEARCH.toUpperCase())) {
+
+                if (contentParts.length >= 2) {
+                    String fullContent = wikiService.getWikipediaPage(contentParts[1]);
+                    if (fullContent != null && fullContent.length() > 0) {
+                        String content1 = fullContent;
+                        if (content1.length() > SMS_LENGTH) {
+                            content1 = content1.substring(0, SMS_LENGTH);
+                        }
+                        BoPendingSMS pendingSMS = new BoPendingSMS();
+                        pendingSMS.setPhoneNumber(phone);
+                        pendingSMS.setContent(content1);
+                        smsDao.savePending(pendingSMS);
+//                        if (fullContent.length() > SMS_LENGTH) {
+//                            String content2 = fullContent.substring(SMS_LENGTH);
+//                            if (content2.length() > SMS_LENGTH) {
+//                                content2 = content2.substring(0, SMS_LENGTH);
+//                            }
+//                            pendingSMS = new BoPendingSMS();
+//                            pendingSMS.setPhoneNumber(phone);
+//                            pendingSMS.setContent(content2);
+//                            smsDao.savePending(pendingSMS);
+//                        }
+                    }
+
+                } else {
+                    throw new DaoMessageException("El mensaje búsqueda educativa debe de contener dos palabras, wiki + palabra a buscar");
+                }
+
             } else if (contentParts[0].toUpperCase().equals(FAMILY_REGISTER.toUpperCase())) {
 
                 if (contentParts.length >= 3) {
@@ -111,6 +149,7 @@ public class SMSDispatcher {
             return new BoPendingSMS();
         } else {
             smsDao.deletePending(pendingSMSList.get(0));
+            Logger.getLogger(getClass().getSimpleName()).log(Level.WARNING,"Got message "+pendingSMSList.get(0).getContent() );
             return pendingSMSList.get(0);
         }
     }
