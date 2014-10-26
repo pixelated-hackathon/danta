@@ -12,45 +12,81 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pixelated.danta.dao.Datasource;
 import pixelated.danta.dao.FamilyDao;
+import pixelated.danta.dao.SMSDao;
+import pixelated.danta.entities.Family;
+import pixelated.danta.entities.FamilyMember;
 import pixelated.danta.service.logic.ErrorHandler;
 import pixelated.dantagae.bo.family.BoFamily;
+import pixelated.dantagae.bo.family.BoFamilyMember;
+import pixelated.dantagae.sms.BoPendingSMS;
+
 /**
  *
  * @author william
  */
 @Service
 public class FamilyInformationService {
-    
+
     @Autowired
     FamilyDao familyDao;
-    
+
+    @Autowired
+    SMSDao smsDao;
+
     @Autowired
     Datasource datasource;
-    
-    public FamilyInformationService(){}
-    
+
+    public FamilyInformationService() {
+    }
+
     public BoFamily getByID(String id) {
-        try{
+        try {
             return familyDao.getById(id);
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             Logger.getLogger(this.getClass().toString()).log(Level.SEVERE, null, ex);
             return null;
         }
     }
 
     public List<BoFamily> getAll() {
-        try{
+        try {
             return familyDao.getAll();
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             ErrorHandler.handleError(this.getClass(), ex);
             return null;
         }
     }
-    
-    public BoFamily registerFamily(BoFamily family) {
-        try{
-            return familyDao.save(family);
-        }catch (Exception ex) {
+
+    public Family registerFamily(Family family) {
+        try {
+
+            BoFamily newFamily = new BoFamily();
+            newFamily.setFamilyLastName(family.getFamilyLastName());
+            newFamily.setFunds(0d);
+            newFamily.setPhone(family.getPhone());
+            newFamily = familyDao.save(newFamily);
+            newFamily.setId(newFamily.getId());
+            
+            
+            if (family.getMembers() != null) {
+                for (FamilyMember member : family.getMembers()) {
+                    BoFamilyMember newMember = new BoFamilyMember();
+                    newMember.setFirstName(member.getFirstName());
+                    newMember.setLastName(member.getLastName());
+                    newMember.setHousehold(member.isHousehold());
+                    newMember.setFamilyId(newFamily.getId());
+                    familyDao.save(newMember);
+                }
+            }
+
+            BoPendingSMS pendingSMS = new BoPendingSMS();
+            pendingSMS.setPhoneNumber(family.getPhone());
+            pendingSMS.setContent("Estimada familia "+ family.getFamilyLastName() +" ,Le notificamos que su familia ha sido aprobada para el programa de apoyo económico danta");
+            smsDao.savePending(pendingSMS);
+
+            return family;
+
+        } catch (Exception ex) {
             Logger.getLogger(this.getClass().toString()).log(Level.SEVERE, null, ex);
             return null;
         }

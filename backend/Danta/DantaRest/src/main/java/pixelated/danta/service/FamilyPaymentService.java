@@ -66,7 +66,7 @@ public class FamilyPaymentService {
 
             BoPendingSMS pendingSMS = new BoPendingSMS();
             pendingSMS.setPhoneNumber(commercePhone);
-            pendingSMS.setContent("Se le confirma el pago de la familia " + family.getFamilyLastName() + " por " + (newFamilyTransaction.getAmount() * -1) + " " + newFamilyTransaction.getCurrencyDescription());
+            pendingSMS.setContent("Se le confirma el pago de la familia " + family.getFamilyLastName() + " por " +Math.abs(newFamilyTransaction.getAmount()) + " " + newFamilyTransaction.getCurrencyDescription());
             smsDao.savePending(pendingSMS);
 
             return true;
@@ -94,6 +94,14 @@ public class FamilyPaymentService {
             family.setFunds(family.getFunds() + amount);
 
             familyDao.update(family);
+            
+            BoPendingSMS pendingSMS = new BoPendingSMS();
+            pendingSMS.setPhoneNumber(family.getPhone());
+            pendingSMS.setContent("Estimada " + family.getFamilyLastName() + ", se le confirma que se le ha realizado un depósito por "+amount+" "+BoCurrency.CURRENCY_DESCRIPTION);
+            smsDao.savePending(pendingSMS);
+
+            
+            
             return family;
 
         } catch (Exception ex) {
@@ -132,9 +140,9 @@ public class FamilyPaymentService {
                 transactionBuilder.append("Su familia ha realizado las siguientes transacciones: \n");
                 for (BoFamilyTransaction transaction : transactions) {
                     if (transaction.getCommerceId() != null && transaction.getCommerceId().length() > 0) {
-                        transactionBuilder.append(transaction.getDescription() + " | " + DateUtils.formatDate(transaction.getCreateDate()) + " comercio: " + transaction.getCommerceDescription() + " cantidad: " + transaction.getAmount() + "\n");
+                        transactionBuilder.append(transaction.getDescription() + " | " + DateUtils.formatDate(transaction.getCreateDate()) + " comercio: " + transaction.getCommerceDescription() + " cantidad: " + Math.abs(transaction.getAmount()) + "\n");
                     } else {
-                        transactionBuilder.append(transaction.getDescription() + " | " + DateUtils.formatDate( transaction.getCreateDate()) + " cantidad: " + transaction.getAmount() + "\n");
+                        transactionBuilder.append(transaction.getDescription() + " | " + DateUtils.formatDate( transaction.getCreateDate()) + " cantidad: " + Math.abs(transaction.getAmount()) + "\n");
                     }
                 }
             }

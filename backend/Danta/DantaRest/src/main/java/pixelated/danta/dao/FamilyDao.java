@@ -15,6 +15,7 @@ import pixelated.danta.dao.exception.DaoNotFoundException;
 import pixelated.danta.dao.exception.DaoRequiredFieldException;
 import pixelated.danta.dao.exception.DaoUnexpectedException;
 import pixelated.dantagae.bo.family.BoFamily;
+import pixelated.dantagae.bo.family.BoFamilyMember;
 import pixelated.dantagae.bo.family.BoFamilyTransaction;
 
 /**
@@ -58,6 +59,10 @@ public class FamilyDao {
 
     public BoFamily save(BoFamily family) throws DaoUnexpectedException {
         return datasource.saveEntity(family);
+    }
+    
+    public BoFamilyMember save(BoFamilyMember member) throws DaoUnexpectedException {
+        return datasource.saveEntity(member);
     }
     
     

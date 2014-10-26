@@ -5,6 +5,7 @@
  */
 package pixelated.danta.service;
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,8 @@ import pixelated.danta.dao.FamilyDao;
 import pixelated.danta.dao.exception.DaoAlreadyExistsException;
 import pixelated.danta.dao.exception.DaoMessageException;
 import pixelated.danta.dao.exception.DaoUnexpectedException;
+import pixelated.danta.entities.Family;
+import pixelated.danta.entities.FamilyMember;
 import pixelated.dantagae.bo.commerce.BoCommerce;
 import pixelated.dantagae.bo.family.BoFamily;
 import pixelated.dantagae.bo.family.BoFamilyMember;
@@ -29,8 +32,15 @@ public class TestService {
     Datasource datasource;
     
     @Autowired
+    FamilyInformationService familyInformationService;
+    
+    
+    @Autowired
+    FamilyPaymentService familyPaymentService;
+    
+    @Autowired
     FamilyDao familyDao;
-
+    
     public TestService() {
     }
 
@@ -100,18 +110,21 @@ public class TestService {
             throw new DaoMessageException("Ya existe una familia con el número de teléfono");
         }
         
-        BoFamily testFamily = new BoFamily();
+        Family testFamily = new Family();
         testFamily.setFamilyLastName(lastName);
-        testFamily.setFunds(generateRandomNumber( 1000 , 6000 ));
         testFamily.setPhone(number);
-        datasource.saveEntity(testFamily);
-
-        BoFamilyMember newMember = new BoFamilyMember();
+        testFamily.setMembers( new ArrayList<FamilyMember>());
+        
+        FamilyMember newMember = new FamilyMember();
         newMember.setFirstName(firstName);
         newMember.setLastName(lastName);
         newMember.setHousehold(true);
-        newMember.setFamilyId(testFamily.getId());
-        datasource.saveEntity(newMember);
+        testFamily.getMembers().add(newMember);
+        
+        testFamily = familyInformationService.registerFamily(testFamily);
+        
+        familyPaymentService.addFunds(testFamily.getId(), generateRandomNumber(1000, 5000));
+        
     }
     
     
