@@ -14,7 +14,7 @@
         <link href="<c:url value="/resources/main/css/expedienteDigitalConsulta.css" />" rel="stylesheet">
     </head>
     <body>
-        <div style="width: 700px;z-index: -1;position: absolute;left: 387px;top: 7PX;color: white;font-size: 20px;letter-spacing: 1px;">PRINCIPAL | CONSULTA | TRANSFERENCIA | SALUD FINANCIERA</div>
+        <div style="width: 700px;z-index: -1;position: absolute;left: 387px;top: 7PX;color: white;font-size: 20px;letter-spacing: 1px;">PRINCIPAL | CONSULTA </div>
         <div class="rightpane">  
             <div style="margin-top: 125px;margin-left: 5px;">VER EN EXPEDIENTE</div>
             <div style="margin-top: 50px;margin-left: 5px;">HISTORIAL TRANSACCIONAL</div>

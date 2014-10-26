@@ -77,7 +77,7 @@ public class TestService {
             newMember = new BoFamilyMember();
             newMember.setFirstName("Kevin");
             newMember.setLastName("Rodriguez");
-            newMember.setHousehold("1");
+            newMember.setHousehold("0");
             newMember.setFamilyId(testFamily.getId());
             newMember.setIdCard("115600009136");
             

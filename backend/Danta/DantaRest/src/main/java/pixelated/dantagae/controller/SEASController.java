@@ -31,10 +31,9 @@ public class SEASController {
     @RequestMapping(value = "/ExpedienteDigital/Consulta", method = RequestMethod.GET)
     public ModelAndView Consulta() {
        ModelAndView model = new ModelAndView("expedienteDigitalConsulta");
-       
-       model.addObject("family", getFamilyService().getByID("ag1kYWwtcGl4ZWxhdGVkchULEghCb0ZhbWlseRiAgICAgIDICww"));
-       model.addObject("hold",getFamilyService().getHold("ag1kYWwtcGl4ZWxhdGVkchULEghCb0ZhbWlseRiAgICAgIDICww"));
-       model.addObject("members",getFamilyService().getMembers("ag1kYWwtcGl4ZWxhdGVkchULEghCb0ZhbWlseRiAgICAgIDICww"));
+       model.addObject("family", getFamilyService().getByID("ag1kYWwtcGl4ZWxhdGVkchULEghCb0ZhbWlseRiAgICAgICYCAw"));
+       model.addObject("hold",getFamilyService().getHold("ag1kYWwtcGl4ZWxhdGVkchULEghCb0ZhbWlseRiAgICAgICYCAw"));
+       model.addObject("members",getFamilyService().getMembers("ag1kYWwtcGl4ZWxhdGVkchULEghCb0ZhbWlseRiAgICAgICYCAw"));
        
        return model;
     }
@@ -43,6 +42,26 @@ public class SEASController {
     @RequestMapping(value = "/ExpedienteDigital/AgregarExpediente", method = RequestMethod.GET)
     public ModelAndView AgregarExpediente() {
        ModelAndView model = new ModelAndView("redirect:/web/ExpedienteDigital/Consulta");
+       
+       //testService.install();
+       
+       return model;
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "/ExpedienteDigital/HistorialTransacciones", method = RequestMethod.GET)
+    public ModelAndView HistorialTransacciones() {
+       ModelAndView model = new ModelAndView("historialTransacciones");
+       
+       //testService.install();
+       
+       return model;
+    }
+    
+    @ResponseBody
+    @RequestMapping(value = "/ExpedienteDigital/Desembolso", method = RequestMethod.GET)
+    public ModelAndView Desembolso() {
+       ModelAndView model = new ModelAndView("desembolso");
        
        //testService.install();
        
