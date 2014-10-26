@@ -5,19 +5,15 @@
  */
 package pixelated.dantagae.controller;
 
-import com.google.appengine.api.datastore.Key;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import pixelated.danta.dao.exception.DaoException;
 import pixelated.danta.service.FamilyInformationService;
-import pixelated.danta.service.TestService;
+import pixelated.dantagae.bo.family.BoFamily;
 /**
  *
  * @author william
@@ -28,13 +24,15 @@ public class SEASController {
     private FamilyInformationService familyService;
     
     @ResponseBody
-    @RequestMapping(value = "/ExpedienteDigital/Consulta", method = RequestMethod.GET)
-    public ModelAndView Consulta() {
+    @RequestMapping(value = "/ExpedienteDigital/Consulta", method = RequestMethod.GET, params = {"phone"})
+    public ModelAndView Consulta(@RequestParam("phone") String phone) {
        ModelAndView model = new ModelAndView("expedienteDigitalConsulta");
        
-       model.addObject("family", getFamilyService().getByID("ag1kYWwtcGl4ZWxhdGVkchULEghCb0ZhbWlseRiAgICAgIDICww"));
-       model.addObject("hold",getFamilyService().getHold("ag1kYWwtcGl4ZWxhdGVkchULEghCb0ZhbWlseRiAgICAgIDICww"));
-       model.addObject("members",getFamilyService().getMembers("ag1kYWwtcGl4ZWxhdGVkchULEghCb0ZhbWlseRiAgICAgIDICww"));
+        BoFamily family = familyService.findByPhone(phone);
+       
+       model.addObject("family", family);
+       model.addObject("hold",getFamilyService().getHold(family.getId()));
+       model.addObject("members",getFamilyService().getMembers(family.getId()));
        
        return model;
     }

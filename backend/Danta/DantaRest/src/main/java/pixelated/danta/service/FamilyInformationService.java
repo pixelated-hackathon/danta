@@ -56,6 +56,15 @@ public class FamilyInformationService {
             return null;
         }
     }
+    
+    public BoFamily findByPhone(String phone) {
+        try {
+            return familyDao.getByPhone(phone, false);
+        } catch (Exception ex) {
+            ErrorHandler.handleError(this.getClass(), ex);
+            return null;
+        }
+    }
 
     public Family registerFamily(Family family) {
         try {
