@@ -40,8 +40,6 @@ public class SEASController {
        model.addObject("hold",getFamilyService().getHold(family.getId()));
        model.addObject("members",getFamilyService().getMembers(family.getId()));
        
-       payment.doPayment("87040233", "70509709", 10000.00);
-       
        return model;
     }
     
