@@ -10,6 +10,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import pixelated.danta.dao.exception.DaoException;
+import pixelated.danta.dao.exception.DaoRequiredFieldException;
 import pixelated.dantagae.sms.BoPendingSMS;
 import pixelated.dantagae.sms.BoSMSLog;
 
@@ -30,13 +31,16 @@ public class SMSDao {
     }
     
     public BoPendingSMS savePending(BoPendingSMS value) throws DaoException {
-        value.setCreateDate(new Date());
         return datasource.saveEntity(value);
 
     }
 
     public List<BoPendingSMS> getAllPendings() throws DaoException {
         return datasource.getAll(BoPendingSMS.class);
+    }
+
+    public void deletePending(BoPendingSMS sms) throws DaoRequiredFieldException {
+        datasource.delete(sms);
     }
 
 }

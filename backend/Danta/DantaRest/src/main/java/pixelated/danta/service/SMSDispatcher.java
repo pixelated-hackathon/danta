@@ -22,12 +22,14 @@ import pixelated.dantagae.sms.BoSMSLog;
 @Service
 public class SMSDispatcher {
 
-    private final String PAYMENT_PREFIX = "Pago";
+    private final String FAMILY_PAYMENT_PREFIX = "Pago";
+    private final String FAMILY_FUNDS = "Saldo";
     @Autowired
     SMSDao smsDao;
+    
     @Autowired
-    FamilyPaymentLogicController familyPaymentLogicController;
-
+    FamilyPaymentService familyPaymentLogicController;
+    
     @Autowired
     ErrorHandler errorHandler;
 
@@ -44,8 +46,8 @@ public class SMSDispatcher {
                 throw new DaoMessageException("El mensaje debe de contener espacios");
             }
 
-            if (contentParts[0].toUpperCase().equals(PAYMENT_PREFIX)) {
-                if (contentParts.length > 3) {
+            if (contentParts[0].toUpperCase().equals(FAMILY_PAYMENT_PREFIX.toUpperCase())) {
+                if (contentParts.length >= 3) {
                     String commerceNumber = contentParts[1];
                     try {
                         Double amount = Double.parseDouble(contentParts[2]);
@@ -57,7 +59,10 @@ public class SMSDispatcher {
                     throw new DaoMessageException("El mensaje para pago debe de contener tres palabra, Pago + número de teléfono del comercio + monto a pagar");
                 }
 
-            } else {
+            } else if (contentParts[0].toUpperCase().equals(FAMILY_FUNDS.toUpperCase())) {
+                familyPaymentLogicController.notifyFundsToFamily (phone);
+                
+            }else {
                 throw new DaoMessageException("Primera palabra no permitida");
             }
         } catch (Exception ex) {
@@ -81,8 +86,13 @@ public class SMSDispatcher {
         return result;
     }
 
-    public List<BoPendingSMS> pullSMS() throws DaoException {
-        return smsDao.getAllPendings();
+    public BoPendingSMS pullSMS() throws DaoException {
+        List<BoPendingSMS> pendingSMSList = smsDao.getAllPendings();
+        if (pendingSMSList.isEmpty()) {
+            return new BoPendingSMS();
+        } else {
+            smsDao.deletePending(pendingSMSList.get(0));
+            return pendingSMSList.get(0);
+        }
     }
-
 }

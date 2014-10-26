@@ -21,7 +21,6 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 import pixelated.danta.dao.Datasource;
 import pixelated.danta.dao.ParamBuilder;
-import pixelated.danta.dao.exception.DaoException;
 import pixelated.danta.dao.exception.DaoNotFoundException;
 import pixelated.danta.dao.exception.DaoRequiredFieldException;
 import pixelated.danta.dao.exception.DaoUnexpectedException;
@@ -151,7 +150,7 @@ public class Datastore implements Datasource {
 
     @Override
     public <T extends DaoEntity> long drop(Class<T> entityClass) {
-      
+
         com.google.appengine.api.datastore.Query q = new com.google.appengine.api.datastore.Query(entityClass.getSimpleName()).setKeysOnly();
 
         // Use PreparedQuery interface to retrieve results
@@ -166,32 +165,53 @@ public class Datastore implements Datasource {
         return keys.size();
     }
 
-    
     @Override
     public <T extends DaoEntity> List<T> findByFields(Class<T> entityClass, ParamBuilder values, boolean validate) throws DaoUnexpectedException, DaoNotFoundException {
-           List<T> results = new ArrayList<>();
-        com.google.appengine.api.datastore.Query q = new com.google.appengine.api.datastore.Query( entityClass.getSimpleName() );
+        List<T> results = new ArrayList<>();
+        com.google.appengine.api.datastore.Query q = new com.google.appengine.api.datastore.Query(entityClass.getSimpleName());
         if (values.size() > 0) {
-            q.setFilter( this.toDatastoreFilter(values) );
+            q.setFilter(this.toDatastoreFilter(values));
         }
         PreparedQuery pq = datastore.prepare(q);
         for (Entity entity : pq.asIterable()) {
-            results.add( this.getDaoEntity(entityClass, entity));
+            results.add(this.getDaoEntity(entityClass, entity));
         }
+        if (validate && results.isEmpty()) {
+            StringBuilder builder = new StringBuilder();
+            for (String filter : values.getParams().keySet()) {
+                builder.append(filter + " = " + values.getParams().get(filter) + " ");
+            }
+            throw new DaoNotFoundException(entityClass, builder.toString());
+        }
+
         return results;
     }
 
     @Override
-    public <T extends DaoEntity> T findByField(Class<T> entityClass, String field, Object value, boolean validate) throws DaoUnexpectedException, DaoNotFoundException {
-       List<T> results = this.findByFields(entityClass, ParamBuilder.param(field, value),validate);
-       if (results.isEmpty()) {
-           return null;
-       } else{
-           return results.get(0);
-       }
+    public <T extends DaoEntity> List<T> findByField(Class<T> entityClass, String field, Object value, boolean validate) throws DaoUnexpectedException, DaoNotFoundException {
+        return this.findByFields(entityClass, ParamBuilder.param(field, value), validate);
     }
-    
-    
+
+    @Override
+    public <T extends DaoEntity> T findFistByField(Class<T> entityClass, String field, Object value, boolean validate) throws DaoUnexpectedException, DaoNotFoundException {
+        List<T> result = this.findByFields(entityClass, ParamBuilder.param(field, value), validate);
+        if (result.isEmpty()) {
+            return null;
+        } else {
+            return result.get(0);
+        }
+    }
+
+    @Override
+    public <T extends DaoEntity> T findFistByFields(Class<T> entityClass, ParamBuilder values, boolean validate) throws DaoUnexpectedException, DaoNotFoundException {
+        List<T> result = this.findByFields(entityClass,values, validate);
+        if (result.isEmpty()) {
+            return null;
+        } else {
+            return result.get(0);
+        }
+    }
+
     protected Query.Filter toDatastoreFilter(ParamBuilder fields) {
         Query.Filter rootFilter;
         if (fields.size() == 1) {
@@ -208,7 +228,14 @@ public class Datastore implements Datasource {
         }
         return rootFilter;
     }
-    
+
+    @Override
+    public <T extends DaoEntity> void delete(T entity) throws DaoRequiredFieldException {
+        if (entity.getId() == null) {
+            throw new DaoRequiredFieldException(entity.getClass(), ID_FIELD);
+        }
+        Key key = KeyFactory.stringToKey(entity.getId());
+        datastore.delete(key);
+    }
+
 }
-
-

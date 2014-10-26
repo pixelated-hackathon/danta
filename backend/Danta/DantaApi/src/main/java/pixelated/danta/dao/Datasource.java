@@ -13,6 +13,7 @@ import pixelated.danta.dao.exception.DaoNotFoundException;
 import pixelated.danta.dao.exception.DaoRequiredFieldException;
 import pixelated.danta.dao.exception.DaoUnexpectedException;
 import pixelated.dantagae.bo.DaoEntity;
+import pixelated.dantagae.sms.BoPendingSMS;
 
 /**
  *
@@ -32,6 +33,12 @@ public interface Datasource {
      
     <T extends DaoEntity> List<T> findByFields(Class<T> entityClass, ParamBuilder values, boolean validate) throws DaoUnexpectedException,DaoNotFoundException;
      
-    <T extends DaoEntity> T findByField(Class<T> entityClass,String field, Object value, boolean validate) throws DaoUnexpectedException,DaoNotFoundException;
+    <T extends DaoEntity> List<T> findByField(Class<T> entityClass,String field, Object value, boolean validate) throws DaoUnexpectedException,DaoNotFoundException;
+    
+    <T extends DaoEntity> T findFistByField(Class<T> entityClass,String field, Object value, boolean validate) throws DaoUnexpectedException,DaoNotFoundException;
+    
+    <T extends DaoEntity> T findFistByFields(Class<T> entityClass,ParamBuilder values, boolean validate) throws DaoUnexpectedException,DaoNotFoundException;
+    
+    <T extends DaoEntity> void delete(T entity) throws DaoRequiredFieldException;
     
 }

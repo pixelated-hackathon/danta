@@ -28,7 +28,7 @@ public class FamilyDao {
     
     public BoFamily getByPhone(String phone) throws DaoUnexpectedException, DaoMessageException {
         try {
-            return datasource.findByField(BoFamily.class , "phone", phone, true);
+            return datasource.findFistByField(BoFamily.class , "phone", phone, true);
         } catch (DaoNotFoundException ex) {
             throw new DaoMessageException("El número de teléfono no corresponde a ninguna familia registrada",ex);
         }
@@ -48,7 +48,10 @@ public class FamilyDao {
 
     public List<BoFamily> getAll() throws DaoUnexpectedException {
        return datasource.getAll(BoFamily.class);
-        
+    }
+    
+    public List<BoFamilyTransaction> getTransactionsByFamilyId(String familyId) throws DaoUnexpectedException, DaoNotFoundException {
+        return datasource.findByField( BoFamilyTransaction.class , "familyId", familyId, false);
     }
     
     

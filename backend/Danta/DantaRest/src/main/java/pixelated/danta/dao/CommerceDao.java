@@ -25,7 +25,7 @@ public class CommerceDao {
     
     public BoCommerce getByPhone(String phone) throws DaoUnexpectedException, DaoMessageException {
         try {
-        return datasource.findByField(BoCommerce.class , "phone", phone, true);
+            return datasource.findFistByField(BoCommerce.class , "phone", phone, true);
         } catch (DaoNotFoundException ex) {
             throw new DaoMessageException("El número de teléfono no corresponde a ningún comercio registrado",ex);
         }

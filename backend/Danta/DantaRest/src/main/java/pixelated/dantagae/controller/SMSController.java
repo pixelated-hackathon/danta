@@ -35,7 +35,8 @@ public class SMSController {
     
     @ResponseBody
     @RequestMapping(value = "/sms/pull",method = RequestMethod.GET)
-    public List<BoPendingSMS> pullSMS() throws DaoException {
+    public BoPendingSMS pullSMS() throws DaoException {
         return smsService.pullSMS();
     }
+    
 }

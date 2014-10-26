@@ -17,7 +17,6 @@ public class BoPendingSMS extends DaoEntity {
     
     private String phoneNumber;
     private String content;
-    private Date createDate;
 
     /**
      * @return the phoneNumber
@@ -47,18 +46,4 @@ public class BoPendingSMS extends DaoEntity {
         this.content = content;
     }
 
-    /**
-     * @return the createDate
-     */
-    public Date getCreateDate() {
-        return createDate;
-    }
-
-    /**
-     * @param createDate the createDate to set
-     */
-    public void setCreateDate(Date createDate) {
-        this.createDate = createDate;
-    }
-    
 }
